@@ -113,3 +113,24 @@ node_modules/
 *.backup
 *.rdl.data
 *.dbproj.schemaview
+
+# Build output
+bin/
+obj/
+
+# Auto-generated files
+**/AssemblyInfo.cs
+**/AssemblyInfo.*.cs
+**/GeneratedMSBuildEditorConfig.editorconfig
+
+# DLLs and other compiled outputs
+*.dll
+*.exe
+*.pdb
+
+# User-specific files
+*.user
+*.suo
+*.rsuser
+*.userosscache
+.vs/
