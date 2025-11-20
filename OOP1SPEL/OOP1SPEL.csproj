@@ -5,7 +5,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    
+    <AssemblyName>OOP1SPEL</AssemblyName>
+    <RootNamespace>MonsterBattler</RootNamespace>
   </PropertyGroup>
 
 </Project>

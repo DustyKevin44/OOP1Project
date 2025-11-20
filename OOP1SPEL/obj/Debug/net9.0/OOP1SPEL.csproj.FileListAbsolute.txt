@@ -1,0 +1,15 @@
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\bin\Debug\net9.0\OOP1SPEL.exe
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\bin\Debug\net9.0\OOP1SPEL.deps.json
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\bin\Debug\net9.0\OOP1SPEL.runtimeconfig.json
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\bin\Debug\net9.0\OOP1SPEL.dll
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\bin\Debug\net9.0\OOP1SPEL.pdb
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\obj\Debug\net9.0\OOP1SPEL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\obj\Debug\net9.0\OOP1SPEL.AssemblyInfoInputs.cache
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\obj\Debug\net9.0\OOP1SPEL.AssemblyInfo.cs
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\obj\Debug\net9.0\OOP1SPEL.csproj.CoreCompileInputs.cache
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\obj\Debug\net9.0\OOP1SPEL.sourcelink.json
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\obj\Debug\net9.0\OOP1SPEL.dll
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\obj\Debug\net9.0\refint\OOP1SPEL.dll
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\obj\Debug\net9.0\OOP1SPEL.pdb
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\obj\Debug\net9.0\OOP1SPEL.genruntimeconfig.cache
+C:\Users\Dusty\Documents\testcsfolder\OOP1SPEL\obj\Debug\net9.0\ref\OOP1SPEL.dll

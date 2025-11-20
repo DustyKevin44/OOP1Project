@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace test
+namespace MonsterBattler
 {
     public class Animation
     {

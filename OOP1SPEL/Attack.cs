@@ -3,7 +3,7 @@ using System.Configuration.Assemblies;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection.Metadata.Ecma335;
 
-namespace test
+namespace MonsterBattler
 {
     public enum DamageTypes { Physical, Magical, Buff, None }
 

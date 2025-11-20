@@ -1,4 +1,4 @@
-namespace test;
+namespace MonsterBattler;
 
 public class Enemy : Character
 {

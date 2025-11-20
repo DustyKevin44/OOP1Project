@@ -1,4 +1,4 @@
-namespace test
+namespace MonsterBattler
 {
     public class Player : Character
     {
@@ -82,8 +82,8 @@ namespace test
                 }
 
                 key = Console.ReadKey(true).Key;
-                if (key == ConsoleKey.DownArrow) selected = (selected + 1) % items.Count;
-                if (key == ConsoleKey.UpArrow) selected = (selected - 1 + items.Count) % items.Count;
+                if (key == ConsoleKey.DownArrow || key == ConsoleKey.RightArrow) selected = (selected + 1) % items.Count;
+                if (key == ConsoleKey.UpArrow || key == ConsoleKey.LeftArrow) selected = (selected - 1 + items.Count) % items.Count;
 
             } while (key != ConsoleKey.Enter);
 
