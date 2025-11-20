@@ -1,0 +1,13 @@
+Saker att göra prio:
+
+
+Måste:
+Player och fiende animationer är olika
+Alla karaktärer är emojis
+Internt system för att starta nya rundor
+
+
+
+New enemy menu:
+-: Name
+-: LVL Enemy.LevelUp(int x) (RandomLevelup)

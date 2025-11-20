@@ -1,0 +1,14 @@
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\obj\Debug\net9.0\EducationalApplication.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\obj\Debug\net9.0\EducationalApplication.AssemblyInfoInputs.cache
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\obj\Debug\net9.0\EducationalApplication.AssemblyInfo.cs
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\obj\Debug\net9.0\EducationalApplication.csproj.CoreCompileInputs.cache
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\bin\Debug\net9.0\EducationalApplication.exe
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\bin\Debug\net9.0\EducationalApplication.deps.json
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\bin\Debug\net9.0\EducationalApplication.runtimeconfig.json
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\bin\Debug\net9.0\EducationalApplication.dll
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\bin\Debug\net9.0\EducationalApplication.pdb
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\obj\Debug\net9.0\EducationalApplication.dll
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\obj\Debug\net9.0\refint\EducationalApplication.dll
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\obj\Debug\net9.0\EducationalApplication.pdb
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\obj\Debug\net9.0\EducationalApplication.genruntimeconfig.cache
+C:\Users\Dusty\Documents\testcsfolder\EducationalApplication\obj\Debug\net9.0\ref\EducationalApplication.dll

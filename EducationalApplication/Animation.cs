@@ -1,0 +1,184 @@
+using System;
+using System.Threading;
+
+namespace test
+{
+    public class Animation
+    {
+        private static void DrawFrame(string top, string mid1, string mid2, string mid3, string mid4, string mid5, string bottom)
+        {
+            Console.Clear();
+            Console.WriteLine("__________________________________________________________________");
+            Console.WriteLine(top);
+            Console.WriteLine(mid1);
+            Console.WriteLine(mid2);
+            Console.WriteLine(mid3);
+            Console.WriteLine(mid4);
+            Console.WriteLine(mid5);
+            Console.WriteLine(bottom);
+            Console.WriteLine("__________________________________________________________________");
+        }
+
+        public static void Ram(Character sender, Character receiver)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                string s = sender.Name;
+                string r = receiver.Name + " (" + receiver.Health + ")";
+                DrawFrame(
+                    $"                                                        {r}",
+                    (i == 6 ? $"                                                      {s}" : " "),
+                    (i == 5 ? $"                                                 {s}" : " "),
+                    (i == 3 ? $"                                            {s}" : " "),
+                    (i == 1 ? $"                                       {s}" : " "),
+                    (i == 0 ? $"                                {s}" : " "),
+                    ""
+                );
+                Thread.Sleep(120);
+            }
+        }
+
+        public static void Fireball(Character sender, Character receiver)
+        {
+            string r = receiver.Name + " (" + receiver.Health + ")";
+            string s = sender.Name + " (" + sender.Health + ")";
+            for (int i = 0; i < 7; i++)
+            {
+                DrawFrame(
+                             $"                                                    {r}",
+                    (i == 5 ? "                                              🔥" : " "),
+                    (i == 4 ? "                                        🔥" : " "),
+                    (i == 3 ? "                                  🔥" : " "),
+                    (i == 2 ? "                            🔥" : " "),
+                    (i == 1 ? "                      🔥" : " "),
+                    (i == 0 ? $" {s}  " : $" {s}  ")
+                );
+                Thread.Sleep(150);
+            }
+        }
+
+        public static void Heal(Character sender)
+        {
+            string s = sender.Name + " (" + sender.Health + ")";
+            for (int i = 0; i < 6; i++)
+            {
+                DrawFrame(
+                    "",
+                    (i % 2 == 0 ? "                              ✨✨✨✨✨" : "                                 ✨✨✨"),
+                    (i % 2 == 1 ? "                              ✨✨✨✨✨" : "                                 ✨✨✨"),
+                    $"                                  {s}",
+                    "",
+                    "",
+                    ""
+                );
+                Thread.Sleep(200);
+            }
+        }
+
+        public static void Weaken(Character sender, Character receiver)
+        {
+            string r = receiver.Name + " (" + receiver.Strength + " STR)";
+            for (int i = 0; i < 6; i++)
+            {
+                DrawFrame(
+                    $"                                                 {r}",
+                    (i % 2 == 0 ? "                            👊 → -2 STR" : "                              👊 → -2 STR"),
+                    "",
+                    "",
+                    "",
+                    $" {sender.Name} (casts weaken)",
+                    ""
+                );
+                Thread.Sleep(200);
+            }
+        }
+
+        public static void BerserkStrike(Character sender, Character receiver)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                DrawFrame(
+                    $"                                                    {receiver.Name} ({receiver.Health})",
+                    (i == 4 ? "                                             💢" : " "),
+                    (i == 3 ? "                                     💢💢" : " "),
+                    (i == 2 ? "                             💢💢💢" : " "),
+                    (i == 1 ? "                     💢💢💢💢" : " "),
+                    (i == 0 ? $" {sender.Name} (BERSERK!)" : " "),
+                    ""
+                );
+                Thread.Sleep(140);
+            }
+        }
+
+        public static void RecoilShot(Character sender, Character receiver)
+        {
+            for (int i = 0; i < 7; i++)
+            {
+                DrawFrame(
+                    $"                                                  {receiver.Name} ({receiver.Health})",
+                    (i == 5 ? "                                           ➜" : " "),
+                    (i == 4 ? "                                     ➜" : " "),
+                    (i == 3 ? "                               ➜" : " "),
+                    (i == 2 ? "                         ➜" : " "),
+                    (i == 1 ? "                   ➜" : $" {sender.Name} (RECOIL)"),
+                    ""
+                );
+                Thread.Sleep(130);
+            }
+        }
+
+        public static void GambleBolt(Character sender, Character receiver)
+        {
+            Random r = new Random();
+            bool crit = r.Next(2) == 0;
+            string bolt =  "⚡⚡⚡";
+            for (int i = 0; i < 6; i++)
+            {
+                DrawFrame(
+                    $"                                                  {receiver.Name} ({receiver.Health})",
+                    (i == 4 ? $"                                        {bolt}" : " "),
+                    (i == 3 ? $"                                    {bolt}" : " "),
+                    (i == 2 ? $"                                {bolt}" : " "),
+                    (i == 1 ? $"                        {bolt}" : " "),
+                    (i == 0 ? $" {sender.Name} (casts Gamble Bolt)" : " "),
+                    ""
+                );
+                Thread.Sleep(150);
+            }
+        }
+
+        public static void BloodOffering(Character sender, Character receiver)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                DrawFrame(
+                    "",
+                    (i % 2 == 0 ? "                                 ❤️" : "                                  💔"),
+                    $"                        {sender.Name} (sacrificing)",
+                    "",
+                    "",
+                    $"                                  → {receiver.Name}",
+                    ""
+                );
+                Thread.Sleep(180);
+            }
+        }
+
+        public static void ArmorCrush(Character sender, Character receiver)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                DrawFrame(
+                    $"                                                  {receiver.Name} ({receiver.Armor} ARM)",
+                    (i == 3 ? "                                    🛡️" : " "),
+                    (i == 2 ? "                                💥🛡️💥" : " "),
+                    (i == 1 ? "                                    🛡️" : " "),
+                    $" {sender.Name} (Crushing Armor)",
+                    "",
+                    ""
+                );
+                Thread.Sleep(170);
+            }
+        }
+    }
+}

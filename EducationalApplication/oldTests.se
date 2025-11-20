@@ -1,0 +1,46 @@
+
+namespace test
+{
+    public class Candidate()
+    {
+        private int i2;
+        int votes;
+        string name = "";
+        bool elim;
+        static void Main()
+        {
+            List<Candidate> candidates = [];
+            for (int i = 0; i < 2; i++)
+            {
+                string tname = getString("Namn");
+                int tvotes = getInt("Antal röster");
+                Candidate temp = new Candidate();
+                temp.name = tname;
+                temp.votes = tvotes;
+                temp.elim = false;
+                candidates.Add(temp);
+            }
+            foreach(Candidate cand in candidates)
+            {
+                Console.WriteLine("Name " + cand.name + " votes " + cand.votes);
+            }
+
+        }
+        static public string getString(string qs)
+        {
+            Console.WriteLine(qs);
+            string val = Console.ReadLine() ?? "";
+            return val;
+        }
+        static public int getInt(string qs)
+        {
+            Console.WriteLine(qs);
+            int.TryParse(Console.ReadLine(), out int val);
+            
+            return val;
+        }
+
+    }
+    
+    
+}
