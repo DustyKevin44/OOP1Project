@@ -11,25 +11,36 @@ namespace MonsterBattler
         static void Main()
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            string pl1 = Console.ReadLine() ?? "Default 1";
 
-            Player player1 = new Player(pl1, 0, 100, 10, 1, 1);
+            Player player1 = new Player("Kevin", 0, 1, 1, 1, 1);
+
             Enemy zomb = new Enemy("Zombie");
-
             player1.NewAbility();
-            zomb.Actions.Add(new FireBall());
+            player1.NewAbility();
 
 
 
-            List<Character> characters = new() { player1, zomb };
-            NewFight(characters);
-            characters.Clear();
-            characters.Add(player1);
-            Enemy kajsa = new Enemy("Kajsa");
-            characters.Add(kajsa);
-            kajsa.LevelUp(100);
-            kajsa.Actions.Add(new GambleBolt());
+            List<Character> characters = new() { player1 };
+
             
+            Enemy kajsa = new Enemy("Kajsa");
+
+        
+         
+            for(int i = 0; i < 10; i++)
+            {
+                Console.WriteLine("Round" + i);
+                List<Character> newFig = new() { player1 };
+                Enemy skele = new Enemy("skeleton" + i);
+                for(int j = 0; j < i; j++) skele.LevelUp();
+                skele.Actions.Add(new FireBall());
+                skele.Actions.Add(new HealBuff());
+                newFig.Add(skele);
+                NewFight(newFig);
+
+                newFig.Clear();
+                if(i % 3 == 0){player1.NewAbility();}
+            }
             
 
             NewFight(characters);

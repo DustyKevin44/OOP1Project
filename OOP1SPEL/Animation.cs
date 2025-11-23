@@ -18,6 +18,46 @@ namespace MonsterBattler
             Console.WriteLine(bottom);
             Console.WriteLine("__________________________________________________________________");
         }
+        public static void ShootAnimation(Character sender, Character receiver, string attackSymbol)
+        {
+            string r = $"{receiver.Name} ({receiver.Health})";
+            string s = $"{sender.Name} ({sender.Health})";
+
+            for (int i = 0; i < 7; i++) // same number of steps as Fireball
+            {
+                DrawFrame(
+                    $"                                                    {r}",           // Receiver on top
+                    (i == 5 ? $"                                              {attackSymbol}" : " "),
+                    (i == 4 ? $"                                        {attackSymbol}" : " "),
+                    (i == 3 ? $"                                  {attackSymbol}" : " "),
+                    (i == 2 ? $"                            {attackSymbol}" : " "),
+                    (i == 1 ? $"                      {attackSymbol}" : " "),
+                    (i == 0 ? $" {s}  " : $" {s}  ")                           // Sender on bottom
+                );
+                Thread.Sleep(150);
+            }
+        }
+
+        // Receiving variant for visual effect only, keeping sender intact
+        public static void ReceiveShootAnimation(Character sender, Character receiver, string attackSymbol)
+        {
+            string r = $"{receiver.Name} ({receiver.Health})";
+            string s = $"{sender.Name} ({sender.Health})";
+
+            for (int i = 0; i < 6; i++)
+            {
+                DrawFrame(
+                    $"                                                  {r}",
+                    (i == 4 ? $"                                        {attackSymbol}" : " "),
+                    (i == 3 ? $"                                    {attackSymbol}" : " "),
+                    (i == 2 ? $"                                {attackSymbol}" : " "),
+                    (i == 1 ? $"                        {attackSymbol}" : " "),
+                    $" {s}",
+                    ""
+                );
+                Thread.Sleep(150);
+            }
+        }
 
         public static void Ram(Character sender, Character receiver)
         {
@@ -38,24 +78,26 @@ namespace MonsterBattler
             }
         }
 
-        public static void Fireball(Character sender, Character receiver)
+        // Receiving Ram (sender stays in place visually)
+        public static void ReceiveRam(Character sender, Character receiver)
         {
+            string s = sender.Name;
             string r = receiver.Name + " (" + receiver.Health + ")";
-            string s = sender.Name + " (" + sender.Health + ")";
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 8; i++)
             {
                 DrawFrame(
-                             $"                                                    {r}",
-                    (i == 5 ? "                                              🔥" : " "),
-                    (i == 4 ? "                                        🔥" : " "),
-                    (i == 3 ? "                                  🔥" : " "),
-                    (i == 2 ? "                            🔥" : " "),
-                    (i == 1 ? "                      🔥" : " "),
-                    (i == 0 ? $" {s}  " : $" {s}  ")
+                    $"                                                        ",
+                    (i == 6 ? $"                                      {r}" : " "),
+                    (i == 5 ? $"                                 {r}" : " "),
+                    (i == 3 ? $"                           {r}" : " "),
+                    (i == 1 ? $"                    {r}" : " "),
+                    $" {s}",
+                    ""
                 );
-                Thread.Sleep(150);
+                Thread.Sleep(120);
             }
         }
+
 
         public static void Heal(Character sender)
         {
@@ -110,42 +152,7 @@ namespace MonsterBattler
             }
         }
 
-        public static void RecoilShot(Character sender, Character receiver)
-        {
-            for (int i = 0; i < 7; i++)
-            {
-                DrawFrame(
-                    $"                                                  {receiver.Name} ({receiver.Health})",
-                    (i == 5 ? "                                           ➜" : " "),
-                    (i == 4 ? "                                     ➜" : " "),
-                    (i == 3 ? "                               ➜" : " "),
-                    (i == 2 ? "                         ➜" : " "),
-                    (i == 1 ? "                   ➜" : $" {sender.Name} (RECOIL)"),
-                    ""
-                );
-                Thread.Sleep(130);
-            }
-        }
 
-        public static void GambleBolt(Character sender, Character receiver)
-        {
-            Random r = new Random();
-            bool crit = r.Next(2) == 0;
-            string bolt =  "⚡⚡⚡";
-            for (int i = 0; i < 6; i++)
-            {
-                DrawFrame(
-                    $"                                                  {receiver.Name} ({receiver.Health})",
-                    (i == 4 ? $"                                        {bolt}" : " "),
-                    (i == 3 ? $"                                    {bolt}" : " "),
-                    (i == 2 ? $"                                {bolt}" : " "),
-                    (i == 1 ? $"                        {bolt}" : " "),
-                    (i == 0 ? $" {sender.Name} (casts Gamble Bolt)" : " "),
-                    ""
-                );
-                Thread.Sleep(150);
-            }
-        }
 
         public static void BloodOffering(Character sender, Character receiver)
         {
@@ -180,5 +187,31 @@ namespace MonsterBattler
                 Thread.Sleep(170);
             }
         }
+       public static void ShowDamage(Character target, int damage, string symbol = "💥")
+{
+    string original = $"{target.Name} ({target.Health})";
+    int newHealth = target.Health - damage;
+
+    // Frames: original, damage shown, health updated
+    string[] frames = new string[]
+    {
+        $"                        {original}                        ",
+        $"                        {original} - {damage}                        ",
+        $"                        {target.Name} ({newHealth})                        "
+    };
+
+    foreach (var frame in frames)
+    {
+        DrawFrame(
+            frame,
+            "", "", "", "", "", ""
+        );
+        Thread.Sleep(300);
+    }
+
+    // Apply the damage after animation
+  
+}
+
     }
 }
