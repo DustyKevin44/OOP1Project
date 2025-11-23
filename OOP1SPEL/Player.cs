@@ -23,7 +23,7 @@ namespace MonsterBattler
             List<string> menuItems = new() { "Actions", "Give Up" };
 
             string[] header = BuildHeader(target, "Choose your action:");
-            int choice = NiceMenu(header, menuItems);
+            int choice = UI.NiceMenu(header, menuItems);
 
             if (choice == 0)
                 AttackMenu(target);
@@ -40,7 +40,7 @@ namespace MonsterBattler
             menuItems.Add("Back");
 
             string[] header = BuildHeader(target, "Choose attack:");
-            int choice = NiceMenu(header, menuItems);
+            int choice = UI.NiceMenu(header, menuItems);
 
             if (choice < Actions.Count)
                 Actions[choice].Execute(this, target);
@@ -63,32 +63,7 @@ namespace MonsterBattler
             };
         }
 
-        private int NiceMenu<T>(string[] header, List<T> items)
-        {
-            ConsoleKey key;
-            int selected = 0;
-            string head = string.Join("\n", header);
-
-            do
-            {
-                Console.Clear();
-                Console.WriteLine(head);
-                Console.WriteLine();
-
-                for (int i = 0; i < items.Count; i++)
-                {
-                    Console.Write(i == selected ? "> " : "  ");
-                    Console.WriteLine(items[i]);
-                }
-
-                key = Console.ReadKey(true).Key;
-                if (key == ConsoleKey.DownArrow || key == ConsoleKey.RightArrow) selected = (selected + 1) % items.Count;
-                if (key == ConsoleKey.UpArrow || key == ConsoleKey.LeftArrow) selected = (selected - 1 + items.Count) % items.Count;
-
-            } while (key != ConsoleKey.Enter);
-
-            return selected;
-        }
+        // `NiceMenu` moved to `UI.NiceMenu` for reuse across the app.
 
         public void NewAbility()
         {
@@ -126,7 +101,7 @@ namespace MonsterBattler
                     {
                         menuPrints.Add($"  {buf.Name} - {buf.GetInfo(this)}");
                     }
-                    menuPrints.Add($"  {action.GetType().GetProperty("Name")?.GetValue(action) ?? action.GetType().Name}");
+                    else{menuPrints.Add($"  {action.GetType().GetProperty("Name")?.GetValue(action) ?? action.GetType().Name}");}
                 }
             }
 
@@ -139,14 +114,17 @@ namespace MonsterBattler
             {
                 IAction instance = (IAction)Activator.CreateInstance(ability)!;
                 if (instance is Attack atk)
-                    menuItems.Add($"{atk.Name} - {atk.GetInfo(this)}");
-                else
-                    menuItems.Add(instance.GetType().GetProperty("Name")?.GetValue(instance)?.ToString() ?? ability.Name);
+                        menuItems.Add($"  {atk.Name} - {atk.GetInfo(this)}");
+                    else if (instance is Buff buf)
+                    {
+                        menuItems.Add($"  {buf.Name} - {buf.GetInfo(this)}");
+                    }
+                    else{menuItems.Add($"  {instance.GetType().GetProperty("Name")?.GetValue(instance) ?? instance.GetType().Name}");}
             }
 
             menuItems.Add("No Attack");
 
-            int choice = NiceMenu(menuPrints.ToArray(), menuItems);
+            int choice = UI.NiceMenu(menuPrints.ToArray(), menuItems);
 
             // Determine which ability was chosen
             if (choice >= 0 && choice < newAbilities.Count)
@@ -178,7 +156,7 @@ namespace MonsterBattler
                 "Choose an attribute to increase by +1:"
             };
 
-            int levelupSelected = NiceMenu(header, menuItems);
+            int levelupSelected = UI.NiceMenu(header, menuItems);
 
             switch (levelupSelected)
             {

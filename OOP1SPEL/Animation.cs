@@ -187,31 +187,100 @@ namespace MonsterBattler
                 Thread.Sleep(170);
             }
         }
-       public static void ShowDamage(Character target, int damage, string symbol = "💥")
-{
-    string original = $"{target.Name} ({target.Health})";
-    int newHealth = target.Health - damage;
+        public static void ShowDamage(Character target, int damage, string symbol = "💥")
+        {
+            string original = $"{target.Name} ({target.Health})";
+            int newHealth = target.Health - damage;
 
-    // Frames: original, damage shown, health updated
-    string[] frames = new string[]
-    {
-        $"                        {original}                        ",
-        $"                        {original} - {damage}                        ",
-        $"                        {target.Name} ({newHealth})                        "
-    };
+            string[] frames = new string[]
+            {
+        original,
+        $"{original} - {damage}",
+        $"{target.Name} ({newHealth})"
+            };
 
-    foreach (var frame in frames)
-    {
-        DrawFrame(
-            frame,
-            "", "", "", "", "", ""
-        );
-        Thread.Sleep(300);
-    }
+            foreach (var text in frames)
+            {
+                DrawFrame(
+                    "", "", "",
+                    $"                        {text}                        ",
+                    "", "", ""
+                );
+                Thread.Sleep(300);
+            }
+        }
+        public static void NewFightAnimation(Character firstPlayer)
+        {
+            string message = $"New fight! {firstPlayer.Name} starts!";
+            for (int i = 0; i < 3; i++)
+            {
+                DrawFrame(
+                    "", "", "",
+                    $"                        {message}                        ",
+                    "", "", ""
+                );
+                Thread.Sleep(400);
+            }
+        }
 
-    // Apply the damage after animation
-  
-}
+        public static void TurnAnimation(Character player)
+        {
+            string message = $"{player.Name}'s turn!";
+            for (int i = 0; i < 3; i++)
+            {
+                DrawFrame(
+                    "", "", "",
+                    $"                        {message}                        ",
+                    "", "", ""
+                );
+                Thread.Sleep(150);
+            }
+        }
+
+        public static void ActionUsedAnimation(Character player, string actionName)
+        {
+            string message = $"{player.Name} used {actionName}!";
+            for (int i = 0; i < 3; i++)
+            {
+                DrawFrame(
+                    "", "", "",
+                    $"                        {message}                        ",
+                    "", "", ""
+                );
+                Thread.Sleep(400);
+            }
+        }
+
+        public static void YouDied(Character player)
+        {
+            string message = $"{player.Name} has fallen...";
+            for (int i = 0; i < 4; i++)
+            {
+                DrawFrame(
+                    "", "", "",
+                    $"                        {message}                        ",
+                    (i % 2 == 0 ? "                              💀💔" : "                                 💀"),
+                    "",
+                    ""
+                );
+                Thread.Sleep(350);
+            }
+        }
+
+        public static void TargetDied(Character target)
+        {
+            string message = $"{target.Name} was defeated!";
+            for (int i = 0; i < 3; i++)
+            {
+                DrawFrame(
+                    "", "", "",
+                    $"                        {message}                        ",
+                    "", "",
+                    ""
+                );
+                Thread.Sleep(300);
+            }
+        }
 
     }
 }

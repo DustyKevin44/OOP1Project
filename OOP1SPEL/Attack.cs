@@ -1,7 +1,4 @@
 using System;
-using System.Configuration.Assemblies;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection.Metadata.Ecma335;
 
 namespace MonsterBattler
 {
@@ -43,10 +40,7 @@ namespace MonsterBattler
         public virtual void Execute(Character sender, Character? receiver = null)
             => ApplyBuff(sender, receiver);
 
-        public virtual void PlayAnimation(Character sender, Character receiver)
-        {
-            // Optional override
-        }
+        public virtual void PlayAnimation(Character sender, Character receiver) { }
 
         public virtual string GetInfo(Character sender)
             => $"[Tier {Tier}] {Name}: {Desc}";
@@ -54,12 +48,12 @@ namespace MonsterBattler
 
     public class HealBuff : Buff
     {
-        public HealBuff() : base("Healing Light", "Restores HP by INT.", 1) { }
+        public HealBuff() : base("Healing Light", "Restores HP by INT * 2.", 1) { }
 
         public override void ApplyBuff(Character sender, Character? receiver = null)
         {
-            sender.Health += sender.Intelligence;
-            Console.WriteLine($"{sender.Name} is healed for {sender.Intelligence} HP!");
+            sender.Health = Math.Min(sender.Health + sender.Intelligence * 2, sender.MaxHealth);
+            Console.WriteLine($"{sender.Name} is healed for {sender.Intelligence * 2} HP!");
             Animation.Heal(sender);
         }
     }
@@ -71,7 +65,6 @@ namespace MonsterBattler
         public override void ApplyBuff(Character sender, Character? receiver)
         {
             if (receiver == null) return;
-
             receiver.Strength = Math.Max(0, receiver.Strength - 2);
             Console.WriteLine($"{receiver.Name}'s Strength is reduced by 2!");
             Animation.Weaken(sender, receiver);
@@ -91,89 +84,61 @@ namespace MonsterBattler
 
         public virtual void PlayAnimation(Character sender, Character receiver) { }
 
-        // --- Damage application ---
         public void ApplyDamage(Character se, Character re, int? total = null)
         {
             int dmg = total ?? CalculateDamageAmount(se, re);
-
             int armorAbsorb = Math.Min(dmg, re.Armor);
             re.Armor -= armorAbsorb;
-
             int remaining = dmg - armorAbsorb;
             if (remaining > 0)
                 re.Health = Math.Max(0, re.Health - remaining);
 
-            // Removed Animation.ShowDamage from here
             Console.WriteLine($"{se.Name} deals {dmg} damage!");
-            if (re.Health == 0)
-            {
-                Console.WriteLine($"{re.Name} is DEAD!");
-                se.LevelUp();
-            }
+         
         }
 
-        // --- Universal formula WITH tier scaling ---
         public virtual int CalculateDamageAmount(Character sender, Character receiver)
         {
             float stat = DType == DamageTypes.Magical ? sender.Intelligence : sender.Strength;
-
-            float tierMult = Tier switch
-            {
-                1 => 1.00f,
-                2 => 1.30f,
-                3 => 1.60f,
-                _ => 1f
-            };
-
+            float tierMult = Tier switch { 1 => 1.0f, 2 => 1.3f, 3 => 1.6f, _ => 1f };
             float baseDamage = Damage * stat * tierMult;
             float maxVar = (DType == DamageTypes.Magical) ? 3f : 2f;
-
             float low = Math.Max(1, stat * tierMult - 1);
             float high = baseDamage * maxVar;
-
             float dex = Math.Max(1, sender.Dexterity);
             float bias = 100f / (100f + dex);
-
             float r = (float)rng.NextDouble();
             float t = (float)Math.Pow(r, bias);
-
             return Math.Max(0, (int)Math.Round(low + (high - low) * t));
         }
 
+        // ==================== CENTRALIZED EXECUTE ====================
         public virtual void Execute(Character sender, Character? receiver)
         {
             if (receiver == null) return;
-            int dmg = CalculateDamageAmount(sender, receiver);
 
+            // ✅ Show action used animation for all attacks
+            Animation.ActionUsedAnimation(sender, Name);
+
+            // ✅ Play attack animation
             PlayAnimation(sender, receiver);
 
-            // Show damage once
+            // ✅ Calculate and show damage
+            int dmg = CalculateDamageAmount(sender, receiver!);
             Animation.ShowDamage(receiver, dmg, DType == DamageTypes.Magical ? "✨" : "💥");
 
-            // Apply the calculated damage to stats
+            // ✅ Apply damage
             ApplyDamage(sender, receiver, dmg);
         }
 
         public virtual (int min, int max) GetDamageBounds(Character sender)
         {
-            float stat = (DType == DamageTypes.Magical)
-                ? sender.Intelligence
-                : sender.Strength;
-
-            float tierMult = Tier switch
-            {
-                1 => 1.00f,
-                2 => 1.30f,
-                3 => 1.60f,
-                _ => 1f
-            };
-
+            float stat = (DType == DamageTypes.Magical) ? sender.Intelligence : sender.Strength;
+            float tierMult = Tier switch { 1 => 1.0f, 2 => 1.3f, 3 => 1.6f, _ => 1f };
             float baseDamage = Damage * stat * tierMult;
             float maxVariance = (DType == DamageTypes.Magical) ? 3f : 2f;
-
             int minDamage = Math.Max(1, (int)Math.Round(stat * tierMult) - 1);
             int maxDamage = (int)Math.Round(baseDamage * maxVariance);
-
             return (minDamage, maxDamage);
         }
 
@@ -189,10 +154,7 @@ namespace MonsterBattler
     {
         public Ram()
         {
-            Name = "Ram";
-            Damage = 2;
-            DType = DamageTypes.Physical;
-            Tier = 1;
+            Name = "Ram"; Damage = 2; DType = DamageTypes.Physical; Tier = 1;
             Desc = "Charge the enemy with brute force.";
         }
 
@@ -204,14 +166,11 @@ namespace MonsterBattler
     {
         public FireBall()
         {
-            Name = "FireBall";
-            Damage = 1;
-            DType = DamageTypes.Magical;
-            Tier = 1;
+            Name = "FireBall"; Damage = 1; DType = DamageTypes.Magical; Tier = 1;
             Desc = "Hurl a fireball that burns the enemy.";
         }
 
-        public void PlayFireballAnimation(Character sender, Character receiver)
+        public override void PlayAnimation(Character sender, Character receiver)
         {
             if (sender is Player)
                 Animation.ShootAnimation(sender, receiver, "🔥");
@@ -224,10 +183,7 @@ namespace MonsterBattler
     {
         public BerserkStrike()
         {
-            Name = "Berserk Strike";
-            Damage = 2;
-            DType = DamageTypes.Physical;
-            Tier = 2;
+            Name = "Berserk Strike"; Damage = 2; DType = DamageTypes.Physical; Tier = 2;
             Desc = "Wild and unpredictable strike.";
         }
 
@@ -239,10 +195,7 @@ namespace MonsterBattler
     {
         public RecoilShot()
         {
-            Name = "Recoil Shot";
-            Damage = 2;
-            DType = DamageTypes.Physical;
-            Tier = 2;
+            Name = "Recoil Shot"; Damage = 2; DType = DamageTypes.Physical; Tier = 2;
             Desc = "Powerful shot that harms yourself slightly.";
         }
 
@@ -254,17 +207,17 @@ namespace MonsterBattler
                 Animation.ReceiveShootAnimation(sender, receiver, "➜");
         }
 
-        public override void Execute(Character sender, Character receiver)
+        public override void Execute(Character sender, Character? receiver)
         {
-            int dmg = CalculateDamageAmount(sender, receiver);
+            // ✅ Insert extra behavior BEFORE base
+            int dmg = CalculateDamageAmount(sender, receiver!);
 
-            PlayAnimation(sender, receiver);
-            Animation.ShowDamage(receiver, dmg, "➜");
-            ApplyDamage(sender, receiver, dmg);
+            // Call centralized base Execute
+            base.Execute(sender, receiver);
 
+            // ✅ Apply recoil after base damage
             int recoil = (int)Math.Ceiling(dmg * 0.2f);
             sender.Health -= recoil;
-
             Console.WriteLine($"{sender.Name} takes {recoil} recoil damage!");
         }
     }
@@ -275,10 +228,7 @@ namespace MonsterBattler
 
         public GambleBolt()
         {
-            Name = "Gamble Bolt";
-            Damage = 1;
-            DType = DamageTypes.Magical;
-            Tier = 3;
+            Name = "Gamble Bolt"; Damage = 1; DType = DamageTypes.Magical; Tier = 3;
             Desc = "50% chance to do triple damage.";
         }
 
@@ -297,13 +247,10 @@ namespace MonsterBattler
             return rng.Next(2) == 0 ? baseDamage * 3 : 0;
         }
 
-        public override void Execute(Character sender, Character receiver)
+        public override void Execute(Character sender, Character? receiver)
         {
-            int dmg = CalculateDamageAmount(sender, receiver);
-
-            PlayAnimation(sender, receiver);
-            Animation.ShowDamage(receiver, dmg, dmg > 0 ? "⚡⚡⚡" : "No damage");
-            ApplyDamage(sender, receiver, dmg);
+            // Use centralized base Execute to handle animations and damage
+            base.Execute(sender, receiver);
         }
     }
 
@@ -311,25 +258,28 @@ namespace MonsterBattler
     {
         public BloodOffering()
         {
-            Name = "Blood Offering";
-            Damage = 3;
-            DType = DamageTypes.Magical;
-            Tier = 3;
+            Name = "Blood Offering"; Damage = 3; DType = DamageTypes.Magical; Tier = 3;
             Desc = "Sacrifice 20% of max HP to empower the attack.";
         }
 
         public override void PlayAnimation(Character sender, Character receiver)
             => Animation.BloodOffering(sender, receiver);
 
-        public override void Execute(Character sender, Character receiver)
+        public override void Execute(Character sender, Character? receiver)
         {
+            // Extra step before base
             sender.Health -= (sender.Vitality * 10) / 5;
             Console.WriteLine($"{sender.Name} sacrifices 20% of health!");
 
-            PlayAnimation(sender, receiver);
-            int dmg = CalculateDamageAmount(sender, receiver);
-            Animation.ShowDamage(receiver, dmg, "✨");
-            ApplyDamage(sender, receiver, dmg);
+            // If the sender died from the sacrifice, abort and let death handling run immediately
+            if (!sender.IsAlive())
+            {
+                Console.WriteLine($"{sender.Name} died from the sacrifice!");
+                return;
+            }
+
+            // Call centralized base Execute
+            base.Execute(sender, receiver);
         }
     }
 
@@ -337,24 +287,22 @@ namespace MonsterBattler
     {
         public ArmorCrush()
         {
-            Name = "Armor Crush";
-            Damage = 1;
-            DType = DamageTypes.Physical;
-            Tier = 3;
+            Name = "Armor Crush"; Damage = 1; DType = DamageTypes.Physical; Tier = 3;
             Desc = "Shatters all enemy armor before hitting.";
         }
 
         public override void PlayAnimation(Character sender, Character receiver)
             => Animation.ArmorCrush(sender, receiver);
 
-        public override void Execute(Character sender, Character receiver)
+        public override void Execute(Character sender, Character? receiver)
         {
+            // Extra step before base
+            if (receiver == null) return;
             receiver.Armor = 0;
             Console.WriteLine($"{receiver.Name}'s armor is shattered!");
-            PlayAnimation(sender, receiver);
-            int dmg = CalculateDamageAmount(sender, receiver);
-            Animation.ShowDamage(receiver, dmg, "💥");
-            ApplyDamage(sender, receiver, dmg);
+
+            // Call centralized base Execute
+            base.Execute(sender, receiver);
         }
     }
 }

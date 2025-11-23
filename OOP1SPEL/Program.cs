@@ -12,7 +12,7 @@ namespace MonsterBattler
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            Player player1 = new Player("Kevin", 0, 1, 1, 1, 1);
+            Player player1 = new Player("Kevin", 0, 10, 1, 1, 1);
 
             Enemy zomb = new Enemy("Zombie");
             player1.NewAbility();
@@ -54,19 +54,32 @@ namespace MonsterBattler
             Random rand = new();
 
             int current = rand.Next(0, 2);
-            while (chars[0].IsAlive() && chars[1].IsAlive())
+
+            // Start combat and allow retry loops
+            CombatManager.StartFight(chars);
+            bool retryLoop;
+            do
             {
-                Console.Clear();
-                // Determine current and target player
-                Character active = chars[current];
-                Character target = chars[1 - current];
+                Animation.NewFightAnimation(chars[current]);
+                // Fight loop
+                while (chars[0].IsAlive() && chars[1].IsAlive() && !CombatManager.FightEnded)
+                {
+                    Console.Clear();
+                    Character active = chars[current];
+                    Character target = chars[1 - current];
+                    Animation.TurnAnimation(active);
+                    active.TakeTurn(target);
 
-                // Execute turn
-                active.TakeTurn(target);
+                    if (CombatManager.FightEnded)
+                        break;
 
-                // Switch to next player
-                current = 1 - current;
-            }
+                    current = 1 - current;
+                }
+
+                // Ask combat manager to show appropriate end screen and decide retry
+                retryLoop = CombatManager.PromptEndFight();
+
+            } while (retryLoop);
 
 
 

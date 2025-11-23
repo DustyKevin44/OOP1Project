@@ -7,12 +7,25 @@ public class Character
     public int Dexterity { get; set; }
     public int Intelligence { get; set; }
     public int Armor { get; set; }
-    public int Health { get; set; }
+    private int _health;
+    public int Health
+    {
+        get => _health;
+        set
+        {
+            _health = Math.Max(0, value);
+            if (_health == 0) OnDeath();
+        }
+    }
+
     public int MaxHealth => Vitality * 10;
 
     public List<IAction> Actions { get; } = new();
     protected Random rand = new();
 
+    private void OnDeath(){
+        CombatManager.OnCharacterDeath(this);
+    }
     public Character(string name, int armor, int strength,
         int vitality, int intelligence, int dexterity)
     {
