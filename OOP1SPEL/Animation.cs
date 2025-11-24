@@ -47,12 +47,12 @@ namespace MonsterBattler
             for (int i = 0; i < 6; i++)
             {
                 DrawFrame(
-                    $"                                                  {r}",
-                    (i == 4 ? $"                                        {attackSymbol}" : " "),
-                    (i == 3 ? $"                                    {attackSymbol}" : " "),
-                    (i == 2 ? $"                                {attackSymbol}" : " "),
-                    (i == 1 ? $"                        {attackSymbol}" : " "),
-                    $" {s}",
+                    $"                                                  {s}",
+                    (i == 1 ? $"                                        {attackSymbol}" : " "),
+                    (i == 2 ? $"                                    {attackSymbol}" : " "),
+                    (i == 3 ? $"                                {attackSymbol}" : " "),
+                    (i == 4 ? $"                        {attackSymbol}" : " "),
+                    $" {r}",
                     ""
                 );
                 Thread.Sleep(150);
@@ -66,7 +66,7 @@ namespace MonsterBattler
                 string s = sender.Name;
                 string r = receiver.Name + " (" + receiver.Health + ")";
                 DrawFrame(
-                    $"                                                        {r}",
+                    $"                                                        {s}",
                     (i == 6 ? $"                                                      {s}" : " "),
                     (i == 5 ? $"                                                 {s}" : " "),
                     (i == 3 ? $"                                            {s}" : " "),
@@ -87,10 +87,10 @@ namespace MonsterBattler
             {
                 DrawFrame(
                     $"                                                        ",
-                    (i == 6 ? $"                                      {r}" : " "),
-                    (i == 5 ? $"                                 {r}" : " "),
-                    (i == 3 ? $"                           {r}" : " "),
-                    (i == 1 ? $"                    {r}" : " "),
+                    (i == 1 ? $"                                      {r}" : " "),
+                    (i == 3 ? $"                                 {r}" : " "),
+                    (i == 5 ? $"                           {r}" : " "),
+                    (i == 7 ? $"                    {r}" : " "),
                     $" {s}",
                     ""
                 );
@@ -145,7 +145,7 @@ namespace MonsterBattler
                     (i == 3 ? "                                     💢💢" : " "),
                     (i == 2 ? "                             💢💢💢" : " "),
                     (i == 1 ? "                     💢💢💢💢" : " "),
-                    (i == 0 ? $" {sender.Name} (BERSERK!)" : " "),
+                    ( $" {sender.Name} (BERSERK!)"),
                     ""
                 );
                 Thread.Sleep(140);
