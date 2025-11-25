@@ -68,6 +68,14 @@ namespace MonsterBattler
             Console.WriteLine($"\nWelcome, {playerName}!");
             System.Threading.Thread.Sleep(1000);
 
+            string[] LevelHeader = new string[] { "You can now choose how many levels you want!" };
+            List<string> LevelMenu = new List<string> { "" };
+            for (int i = 1; i <= 10; i++)
+            {
+                LevelMenu.Add(i.ToString());
+            }
+            int playerLvl = UI.NiceMenu(LevelHeader, LevelMenu);
+            for(int i = 0; i < playerLvl; i++) player1.LevelUp();
             string[] abilityHeader = new string[] { "You can now choose your starting abilities!" };
             List<string> abilityMenu = new List<string> { "Continue" };
             UI.NiceMenu(abilityHeader, abilityMenu);
@@ -122,7 +130,7 @@ namespace MonsterBattler
                     ""
             };
             Thread.Sleep(200);
-            
+
 
             Console.Clear();
             Console.WriteLine("════════════════════════════");
@@ -185,7 +193,7 @@ namespace MonsterBattler
         }
         static void AddAbilitiesToEnemy(Enemy enemy)
         {
-            IActionFactory factory = new ActionFactory();
+            ActionFactory factory = new ActionFactory();
 
             string[] abilityHeader =
             {

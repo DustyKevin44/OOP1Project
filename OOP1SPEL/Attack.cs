@@ -159,8 +159,12 @@ namespace MonsterBattler
         }
 
         public override void PlayAnimation(Character sender, Character receiver)
-            => Animation.Ram(sender, receiver);
-    }
+{
+            if (sender is Player)
+                Animation.Ram(sender, receiver);
+            else
+                Animation.ReceiveRam(sender, receiver);
+        }    }
 
     public class FireBall : Attack
     {

@@ -66,7 +66,7 @@ namespace MonsterBattler
         // `NiceMenu` moved to `UI.NiceMenu` for reuse across the app.
         public void NewAbility()
         {
-            IActionFactory factory = new ActionFactory();
+            ActionFactory factory = new ActionFactory();
 
             // All ability names registered inside ActionFactory
             List<string> allAbilities = factory.GetAllActionNames().ToList();

@@ -1,5 +1,5 @@
 
-namespace MonsterBattler;
+namespace MonsterBattler{
 
 public class ActionFactory
 {
@@ -34,5 +34,5 @@ public class ActionFactory
         return null; // Unknown ability
     }
 
-    public IEnumerable<string> GetAllActionNames() => _registry.Keys;
-}
+  public IEnumerable<string> GetAllActionNames() => _registry.Keys;
+}}

@@ -61,10 +61,11 @@ namespace MonsterBattler
 
         public static void Ram(Character sender, Character receiver)
         {
+            string s = sender.Name;
+            string r = receiver.Name + " (" + receiver.Health + ")";
             for (int i = 0; i < 8; i++)
             {
-                string s = sender.Name;
-                string r = receiver.Name + " (" + receiver.Health + ")";
+                
                 DrawFrame(
                     $"                                                        {r}",
                     (i == 6 ? $"                                                      {s}" : " "),
@@ -83,20 +84,22 @@ namespace MonsterBattler
         {
             string s = sender.Name;
             string r = receiver.Name + " (" + receiver.Health + ")";
+
             for (int i = 0; i < 8; i++)
             {
+                
                 DrawFrame(
-                    $"                                                        ",
-                    (i == 1 ? $"                                      {r}" : " "),
-                    (i == 3 ? $"                                 {r}" : " "),
-                    (i == 5 ? $"                           {r}" : " "),
-                    (i == 7 ? $"                    {r}" : " "),
-                    $" {s}",
+                    (i == 0 ? $"                                                   {s}" : " "),
+                    (i == 1 ? $"                                              {s}" : " "),
+                    (i == 3 ? $"                                         {s}" : " "),
+                    (i == 5 ? $"                                    {s}" : " "),
+                    (i == 6 ? $"                             {s}" : " "),
+                    $" {r}",
                     ""
                 );
                 Thread.Sleep(120);
             }
-        }
+           }
 
 
         public static void Heal(Character sender)
