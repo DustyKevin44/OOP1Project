@@ -66,7 +66,7 @@ namespace MonsterBattler
                 string s = sender.Name;
                 string r = receiver.Name + " (" + receiver.Health + ")";
                 DrawFrame(
-                    $"                                                        {s}",
+                    $"                                                        {r}",
                     (i == 6 ? $"                                                      {s}" : " "),
                     (i == 5 ? $"                                                 {s}" : " "),
                     (i == 3 ? $"                                            {s}" : " "),

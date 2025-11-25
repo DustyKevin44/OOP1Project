@@ -66,6 +66,80 @@ public class Enemy : Character
             }
         }
     }
+
+    /// <summary>
+    /// Interactive menu for customizing enemy attributes
+    /// </summary>
+    public void LevelUpCustom()
+    {
+        bool levelingUp = true;
+
+        while (levelingUp)
+        {
+            List<string> menuItems = new()
+            {
+                $"Strength   ({Strength})",
+                $"Vitality   ({Vitality})",
+                $"Intelligence ({Intelligence})",
+                $"Dexterity   ({Dexterity})",
+                $"Armor      ({Armor})",
+                "Done Leveling Up"
+            };
+
+            string[] header = new string[]
+            {
+                "════════════════════════════",
+                $"    LEVEL UP {Name.ToUpper()}",
+                "════════════════════════════",
+                "Choose an attribute to increase by +1:",
+                ""
+            };
+
+            int choice = UI.NiceMenu(header, menuItems);
+
+            switch (choice)
+            {
+                case 0:
+                    Strength += 1;
+                    Console.WriteLine($"{Name}'s Strength increased to {Strength}!");
+                    System.Threading.Thread.Sleep(600);
+                    break;
+
+                case 1:
+                    Vitality += 1;
+                    Health += 10;
+                    Console.WriteLine($"{Name}'s Vitality increased to {Vitality}!");
+                    System.Threading.Thread.Sleep(600);
+                    break;
+
+                case 2:
+                    Intelligence += 1;
+                    Console.WriteLine($"{Name}'s Intelligence increased to {Intelligence}!");
+                    System.Threading.Thread.Sleep(600);
+                    break;
+
+                case 3:
+                    Dexterity += 1;
+                    Console.WriteLine($"{Name}'s Dexterity increased to {Dexterity}!");
+                    System.Threading.Thread.Sleep(600);
+                    break;
+
+                case 4:
+                    Armor += 1;
+                    Console.WriteLine($"{Name}'s Armor increased to {Armor}!");
+                    System.Threading.Thread.Sleep(600);
+                    break;
+
+                case 5:
+                    levelingUp = false;
+                    break;
+            }
+        }
+
+        // Update health to match new vitality
+        Health = MaxHealth;
+    }
+
     public override void TakeTurn(Character target)
     {
         if (Actions.Count == 0)

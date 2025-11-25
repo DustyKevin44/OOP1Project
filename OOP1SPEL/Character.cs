@@ -7,6 +7,7 @@ public class Character
     public int Dexterity { get; set; }
     public int Intelligence { get; set; }
     public int Armor { get; set; }
+    // ============== Computed properties ==================
     private int _health;
     public int Health
     {
@@ -19,6 +20,7 @@ public class Character
     }
 
     public int MaxHealth => Vitality * 10;
+
 
     public List<IAction> Actions { get; } = new();
     protected Random rand = new();

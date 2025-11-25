@@ -12,43 +12,227 @@ namespace MonsterBattler
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            Player player1 = new Player("Kevin", 0, 10, 1, 1, 1);
-
-            Enemy zomb = new Enemy("Zombie");
-            player1.NewAbility();
-            player1.NewAbility();
-
-
-
-            List<Character> characters = new() { player1 };
-
-            
-            Enemy kajsa = new Enemy("Kajsa");
-
-        
-         
-            for(int i = 0; i < 10; i++)
-            {
-                Console.WriteLine("Round" + i);
-                List<Character> newFig = new() { player1 };
-                Enemy skele = new Enemy("skeleton" + i);
-                for(int j = 0; j < i; j++) skele.LevelUp();
-                skele.Actions.Add(new FireBall());
-                skele.Actions.Add(new HealBuff());
-                newFig.Add(skele);
-                NewFight(newFig);
-
-                newFig.Clear();
-                if(i % 3 == 0){player1.NewAbility();}
-            }
-            
-
-            NewFight(characters);
-            Console.WriteLine("End Of Game");
-
-            characters[0].Print();
-            characters[1].Print();
+            MainMenu();
         }
+
+        static void MainMenu()
+        {
+            bool running = true;
+
+            while (running)
+            {
+                string[] header = new string[]
+                {
+                        "════════════════════════════",
+                        "     MONSTER BATTLER ARENA",
+                        "════════════════════════════",
+                        ""
+                };
+
+                List<string> menuItems = new List<string>
+                    {
+                        "Create Player & Battle",
+                        "Quit"
+                    };
+
+                int choice = UI.NiceMenu(header, menuItems);
+
+                switch (choice)
+                {
+                    case 0:
+                        CreatePlayerAndBattle();
+                        break;
+                    case 1:
+                        running = false;
+                        Console.Clear();
+                        Console.WriteLine("Thanks for playing!");
+                        break;
+                }
+            }
+        }
+
+        static void CreatePlayerAndBattle()
+        {
+            // Get player name
+            Console.Clear();
+            Console.WriteLine("════════════════════════════");
+            Console.WriteLine("     CREATE YOUR PLAYER");
+            Console.WriteLine("════════════════════════════");
+            Console.WriteLine();
+            Console.Write("Enter your player name: ");
+            string playerName = Console.ReadLine() ?? "Hero";
+
+            Player player1 = new Player(playerName, 0, 1, 1, 1, 1);
+
+            // Let player choose abilities
+            Console.WriteLine($"\nWelcome, {playerName}!");
+            System.Threading.Thread.Sleep(1000);
+
+            string[] abilityHeader = new string[] { "You can now choose your starting abilities!" };
+            List<string> abilityMenu = new List<string> { "Continue" };
+            UI.NiceMenu(abilityHeader, abilityMenu);
+
+            player1.NewAbility();
+            player1.NewAbility();
+
+            // Enter combat loop
+            bool continueBattle = true;
+            while (continueBattle)
+            {
+                Enemy? enemy = CreateEnemyMenu();
+
+                if (enemy == null)
+                {
+                    continueBattle = false;
+                    break;
+                }
+
+                List<Character> combatants = new() { player1, enemy };
+                NewFight(combatants);
+
+                // Ask if player wants to continue
+                if (player1.IsAlive())
+                {
+                    string[] continueHeader = new string[]
+                    {
+                            "━━━━━━━━━━━━━━━━━━━━",
+                            "Battle Complete!",
+                            ""
+                    };
+                    List<string> continueMenu = new List<string> { "Challenge Another Enemy", "Return to Main Menu" };
+                    int continueChoice = UI.NiceMenu(continueHeader, continueMenu);
+
+                    if (continueChoice == 1)
+                        continueBattle = false;
+                }
+                else
+                {
+                    continueBattle = false;
+                }
+            }
+        }
+
+        static Enemy? CreateEnemyMenu()
+        {
+            string[] nameHeader = new string[]
+            {
+                    "════════════════════════════",
+                    "    CREATE ENEMY",
+                    "════════════════════════════",
+                    ""
+            };
+            Thread.Sleep(200);
+            
+
+            Console.Clear();
+            Console.WriteLine("════════════════════════════");
+            Console.WriteLine("    ENTER ENEMY NAME");
+            Console.WriteLine("════════════════════════════");
+            Console.WriteLine();
+            Console.Write("Enemy name: ");
+            string? enemyInput = Console.ReadLine();
+            string enemyName = string.IsNullOrWhiteSpace(enemyInput) ? "Enemy" : enemyInput;
+
+            Enemy enemy = new Enemy(enemyName);
+
+            // Level up menu
+            string[] levelHeader = new string[]
+            {
+                    "════════════════════════════",
+                    "    LEVEL UP ENEMY",
+                    "════════════════════════════",
+                    ""
+            };
+
+            List<string> levelMenu = new List<string> { "Random Levels", "Custom Levels" };
+            int levelChoice = UI.NiceMenu(levelHeader, levelMenu);
+
+            if (levelChoice == 0)
+            {
+                // Random levels
+                string[] randomHeader = new string[]
+                {
+                        "════════════════════════════",
+                        "    HOW MANY RANDOM LEVELS?",
+                        "════════════════════════════",
+                        ""
+                };
+
+                List<string> randomMenu = new List<string>();
+                for (int i = 1; i <= 10; i++)
+                {
+                    randomMenu.Add(i.ToString());
+                }
+
+                int randomChoice = UI.NiceMenu(randomHeader, randomMenu);
+                int levels = randomChoice + 1;
+
+                for (int i = 0; i < levels; i++)
+                {
+                    enemy.LevelUp();
+                }
+            }
+            else
+            {
+                // Custom levels
+                enemy.LevelUpCustom();
+            }
+
+            // Add abilities to enemy
+            AddAbilitiesToEnemy(enemy);
+
+            return enemy;
+        }
+        static void AddAbilitiesToEnemy(Enemy enemy)
+        {
+            IActionFactory factory = new ActionFactory();
+
+            string[] abilityHeader =
+            {
+        "════════════════════════════",
+        $"    ADD ABILITIES TO {enemy.Name.ToUpper()}",
+        "════════════════════════════",
+        ""
+        };
+
+            // Get all abilities registered inside ActionFactory
+            List<string> allAbilities = factory.GetAllActionNames().ToList();
+            allAbilities.Add("Done Adding Abilities");
+
+            bool addingAbilities = true;
+
+            while (addingAbilities)
+            {
+                // Filter out already-learned abilities
+                var available = allAbilities
+                    .Where(a =>
+                        a == "Done Adding Abilities" ||
+                        !enemy.Actions.Any(x => x.GetType().Name.Equals(a, StringComparison.OrdinalIgnoreCase))
+                    )
+                    .ToList();
+
+                int choice = UI.NiceMenu(abilityHeader, available);
+
+                string chosenName = available[choice];
+
+                if (chosenName == "Done Adding Abilities")
+                {
+                    addingAbilities = false;
+                }
+                else
+                {
+                    IAction? newAction = factory.Create(chosenName);
+
+                    if (newAction != null)
+                    {
+                        enemy.Actions.Add(newAction);
+                        Console.WriteLine($"Added {chosenName} to {enemy.Name}!");
+                        System.Threading.Thread.Sleep(800);
+                    }
+                }
+            }
+        }
+
         static void NewFight(List<Character> chars)
         {
             Random rand = new();
@@ -80,9 +264,6 @@ namespace MonsterBattler
                 retryLoop = CombatManager.PromptEndFight();
 
             } while (retryLoop);
-
-
-
         }
     }
 }

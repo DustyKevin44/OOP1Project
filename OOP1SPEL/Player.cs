@@ -64,81 +64,80 @@ namespace MonsterBattler
         }
 
         // `NiceMenu` moved to `UI.NiceMenu` for reuse across the app.
-
         public void NewAbility()
         {
-            List<Type> allAbilities = new List<Type>()
-            {
-                typeof(Ram),
-                typeof(FireBall),
-                typeof(HealBuff),
-                typeof(BerserkStrike),
-                typeof(RecoilShot),
-                typeof(GambleBolt),
-                typeof(BloodOffering),
-                typeof(ArmorCrush),
-                typeof(WeakenEnemy) // HealBuff removed
-            };
+            IActionFactory factory = new ActionFactory();
 
-            HashSet<Type> ownedTypes = new HashSet<Type>(Actions.Select(a => a.GetType()));
-            List<Type> newAbilities = allAbilities.Where(a => !ownedTypes.Contains(a)).ToList();
+            // All ability names registered inside ActionFactory
+            List<string> allAbilities = factory.GetAllActionNames().ToList();
 
-            // Prepare display strings for menu
-            List<string> menuPrints = new List<string>();
+            // Player already owns these types
+            HashSet<string> ownedNames = Actions
+                .Select(a => a.GetType().Name)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-            // Show currently owned abilities
-            menuPrints.Add(Name + " Turn!");
-            menuPrints.Add("Currently owned abilities:");
+            // Get abilities the player does NOT already own
+            List<string> newAbilityNames = allAbilities
+                .Where(a => !ownedNames.Contains(a))
+                .ToList();
+
+            // Menu header
+            List<string> menuHeader = new()
+    {
+        $"{Name} Turn!",
+        "Currently owned abilities:"
+    };
+
             if (Actions.Count == 0)
-                menuPrints.Add("  None");
+                menuHeader.Add("  None");
             else
             {
                 foreach (var action in Actions)
                 {
                     if (action is Attack atk)
-                        menuPrints.Add($"  {atk.Name} - {atk.GetInfo(this)}");
+                        menuHeader.Add($"  {atk.Name} - {atk.GetInfo(this)}");
                     else if (action is Buff buf)
-                    {
-                        menuPrints.Add($"  {buf.Name} - {buf.GetInfo(this)}");
-                    }
-                    else{menuPrints.Add($"  {action.GetType().GetProperty("Name")?.GetValue(action) ?? action.GetType().Name}");}
+                        menuHeader.Add($"  {buf.Name} - {buf.GetInfo(this)}");
+                    else
+                        menuHeader.Add($"  {action.GetType().Name}");
                 }
             }
 
-            menuPrints.Add(""); // Spacer
-            menuPrints.Add("Choose new abilities from below:");
+            menuHeader.Add("");
+            menuHeader.Add("Choose new abilities from below:");
 
-            // Show new abilities with info
-            List<string> menuItems = new List<string>();
-            foreach (Type ability in newAbilities)
+            // Build menu items from NEW abilities
+            List<string> menuItems = new();
+            foreach (var abilityName in newAbilityNames)
             {
-                IAction instance = (IAction)Activator.CreateInstance(ability)!;
+                var instance = factory.Create(abilityName)!;
+
                 if (instance is Attack atk)
-                        menuItems.Add($"  {atk.Name} - {atk.GetInfo(this)}");
-                    else if (instance is Buff buf)
-                    {
-                        menuItems.Add($"  {buf.Name} - {buf.GetInfo(this)}");
-                    }
-                    else{menuItems.Add($"  {instance.GetType().GetProperty("Name")?.GetValue(instance) ?? instance.GetType().Name}");}
+                    menuItems.Add($"{atk.Name} - {atk.GetInfo(this)}");
+                else if (instance is Buff buf)
+                    menuItems.Add($"{buf.Name} - {buf.GetInfo(this)}");
+                else
+                    menuItems.Add(abilityName);
             }
 
             menuItems.Add("No Attack");
 
-            int choice = UI.NiceMenu(menuPrints.ToArray(), menuItems);
+            int choice = UI.NiceMenu(menuHeader.ToArray(), menuItems);
 
-            // Determine which ability was chosen
-            if (choice >= 0 && choice < newAbilities.Count)
+            if (choice >= 0 && choice < newAbilityNames.Count)
             {
-                IAction chosenAbility = (IAction)Activator.CreateInstance(newAbilities[choice])!;
-                Actions.Add(chosenAbility);
-                Console.WriteLine($"Added ability: {menuItems[choice]}");
+                string chosenName = newAbilityNames[choice];
+                var newAbility = factory.Create(chosenName)!;
+
+                Actions.Add(newAbility);
+                Console.WriteLine($"Added ability: {chosenName}");
             }
             else
             {
-                // "No Attack" selected, do nothing
                 Console.WriteLine("No new ability added.");
             }
         }
+
         public override void LevelUp()
         {
             List<string> menuItems = new()
