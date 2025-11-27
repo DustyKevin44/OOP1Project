@@ -50,6 +50,27 @@ namespace MonsterBattler
                 }
             }
         }
+        static void RoundInitiater(Player player, int round)
+        {
+            if(round == 0)
+            {
+                    // Get player name
+            Console.Clear();
+            Console.WriteLine("════════════════════════════");
+            Console.WriteLine("     CREATE YOUR PLAYER");
+            Console.WriteLine("════════════════════════════");
+            Console.WriteLine();
+            Console.Write("Enter your player name: ");
+            string playerName = Console.ReadLine() ?? "Hero";
+
+            Player player1 = new Player(playerName, 0, 1, 1, 1, 1);
+            RoundInitiater(player1, round++);
+            }else if(round == 1)
+            {
+                List<Character> chars = new List<Character>{player, new Enemy("Zombie")};
+                NewFight(chars);
+            }
+        }
 
         static void CreatePlayerAndBattle()
         {
