@@ -9,6 +9,16 @@ public class Enemy : Character
         : base(name, armor: 0, strength: 1, vitality: 1, intelligence: 1, dexterity: 1)
     {
     }
+    public Enemy(
+    string name,
+    int armor,
+    int strength,
+    int vitality,
+    int intelligence,
+    int dexterity)
+    : base(name, armor, strength, vitality, intelligence, dexterity)
+    {
+    }
 
     /// <summary>
     /// Level up enemy with either random upgrades or specified ones.
