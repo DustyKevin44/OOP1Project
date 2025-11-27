@@ -6,17 +6,16 @@ public class Enemy : Character
 
     // Constructor: everything defaults to 1
     public Enemy(string name)
-        : base(name, armor: 0, strength: 1, vitality: 1, intelligence: 1, dexterity: 1)
+        : base(name, strength: 1, vitality: 1, intelligence: 1, dexterity: 1)
     {
     }
     public Enemy(
     string name,
-    int armor,
     int strength,
     int vitality,
     int intelligence,
     int dexterity)
-    : base(name, armor, strength, vitality, intelligence, dexterity)
+    : base(name , strength, vitality, intelligence, dexterity)
     {
     }
 
@@ -35,8 +34,7 @@ public class Enemy : Character
         int str = 0,
         int vit = 0,
         int intel = 0,
-        int dex = 0,
-        int armor = 0)
+        int dex = 0)
     {
         if (randomLevels > 0)
         {
@@ -44,20 +42,19 @@ public class Enemy : Character
         }
         else
         {
-            ApplySpecificLevelUps(str, vit, intel, dex, armor);
+            ApplySpecificLevelUps(str, vit, intel, dex);
         }
 
         // Ensure health scales properly when vitality changes
         Health = MaxHealth;
     }
 
-    private void ApplySpecificLevelUps(int str, int vit, int intel, int dex, int armor)
+    private void ApplySpecificLevelUps(int str, int vit, int intel, int dex)
     {
         Strength += str;
         Vitality += vit;
         Intelligence += intel;
         Dexterity += dex;
-        Armor += armor;
     }
 
     private void ApplyRandomLevelUps(int count)
@@ -72,7 +69,6 @@ public class Enemy : Character
                 case 1: Vitality++; break;
                 case 2: Intelligence++; break;
                 case 3: Dexterity++; break;
-                case 4: Armor++; break;
             }
         }
     }
@@ -92,7 +88,6 @@ public class Enemy : Character
                 $"Vitality   ({Vitality})",
                 $"Intelligence ({Intelligence})",
                 $"Dexterity   ({Dexterity})",
-                $"Armor      ({Armor})",
                 "Done Leveling Up"
             };
 
@@ -134,11 +129,7 @@ public class Enemy : Character
                     System.Threading.Thread.Sleep(600);
                     break;
 
-                case 4:
-                    Armor += 1;
-                    Console.WriteLine($"{Name}'s Armor increased to {Armor}!");
-                    System.Threading.Thread.Sleep(600);
-                    break;
+           
 
                 case 5:
                     levelingUp = false;

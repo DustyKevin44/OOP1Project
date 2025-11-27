@@ -87,9 +87,8 @@ namespace MonsterBattler
         public void ApplyDamage(Character se, Character re, int? total = null)
         {
             int dmg = total ?? CalculateDamageAmount(se, re);
-            int armorAbsorb = Math.Min(dmg, re.Armor);
-            re.Armor -= armorAbsorb;
-            int remaining = dmg - armorAbsorb;
+      
+            int remaining = dmg;
             if (remaining > 0)
                 re.Health = Math.Max(0, re.Health - remaining);
 
@@ -287,26 +286,5 @@ namespace MonsterBattler
         }
     }
 
-    public class ArmorCrush : Attack
-    {
-        public ArmorCrush()
-        {
-            Name = "Armor Crush"; Damage = 1; DType = DamageTypes.Physical; Tier = 3;
-            Desc = "Shatters all enemy armor before hitting.";
-        }
 
-        public override void PlayAnimation(Character sender, Character receiver)
-            => Animation.ArmorCrush(sender, receiver);
-
-        public override void Execute(Character sender, Character? receiver)
-        {
-            // Extra step before base
-            if (receiver == null) return;
-            receiver.Armor = 0;
-            Console.WriteLine($"{receiver.Name}'s armor is shattered!");
-
-            // Call centralized base Execute
-            base.Execute(sender, receiver);
-        }
-    }
 }

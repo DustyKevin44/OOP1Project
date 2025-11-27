@@ -174,22 +174,7 @@ namespace MonsterBattler
             }
         }
 
-        public static void ArmorCrush(Character sender, Character receiver)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                DrawFrame(
-                    $"                                                  {receiver.Name} ({receiver.Armor} ARM)",
-                    (i == 3 ? "                                    🛡️" : " "),
-                    (i == 2 ? "                                💥🛡️💥" : " "),
-                    (i == 1 ? "                                    🛡️" : " "),
-                    $" {sender.Name} (Crushing Armor)",
-                    "",
-                    ""
-                );
-                Thread.Sleep(170);
-            }
-        }
+        
         public static void ShowDamage(Character target, int damage, string symbol = "💥")
         {
             string original = $"{target.Name} ({target.Health})";
@@ -214,7 +199,7 @@ namespace MonsterBattler
         }
         public static void NewFightAnimation(Character firstPlayer)
         {
-            string message = $"New fight! {firstPlayer.Name} starts!";
+            string message = $"A new fight! {firstPlayer.Name} starts!";
             for (int i = 0; i < 3; i++)
             {
                 DrawFrame(
@@ -282,6 +267,21 @@ namespace MonsterBattler
                     ""
                 );
                 Thread.Sleep(300);
+            }
+        }
+        
+        public static void ShowText(string[] msgs)
+        {
+            
+            for (int i = 0; i < msgs.Length - 1; i++)
+            {
+                DrawFrame(
+                    "", "", "",
+                    $"                        {msgs[i]}                        ",
+                    "", "",
+                    ""
+                );
+                Thread.Sleep(900);
             }
         }
 

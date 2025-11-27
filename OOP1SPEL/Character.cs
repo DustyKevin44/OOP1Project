@@ -6,7 +6,7 @@ public class Character
     public int Vitality { get; set; }
     public int Dexterity { get; set; }
     public int Intelligence { get; set; }
-    public int Armor { get; set; }
+    
     // ============== Computed properties ==================
     private int _health;
     public int Health
@@ -28,11 +28,11 @@ public class Character
     private void OnDeath(){
         CombatManager.OnCharacterDeath(this);
     }
-    public Character(string name, int armor, int strength,
+    public Character(string name,  int strength,
         int vitality, int intelligence, int dexterity)
     {
         Name = name;
-        Armor = armor;
+     
         Strength = strength;
         Vitality = vitality;
         Intelligence = intelligence;
@@ -53,7 +53,7 @@ public class Character
             Health = MaxHealth / 2;
     }
      public void Print() { 
-            Console.WriteLine($"{Name}: Health: {Health} MaxHealth: {MaxHealth} Armor: {Armor} Strength: {Strength} Intelligence: {Intelligence} Dexterity: {Dexterity}");
+            Console.WriteLine($"{Name}: Health: {Health} MaxHealth: {MaxHealth} Strength: {Strength} Intelligence: {Intelligence} Dexterity: {Dexterity}");
     }
     public virtual void TakeTurn(Character target){}
     public virtual void LevelUp(){}

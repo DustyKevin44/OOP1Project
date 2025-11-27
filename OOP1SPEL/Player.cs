@@ -2,9 +2,9 @@ namespace MonsterBattler
 {
     public class Player : Character
     {
-        public Player(string name, int armor, int strength,
+        public Player(string name, int strength,
             int vitality, int intelligence, int dexterity)
-            : base(name, armor, strength, vitality, intelligence, dexterity) { }
+            : base(name, strength, vitality, intelligence, dexterity) { }
 
         public override void TakeTurn(Character target)
         {
@@ -62,29 +62,43 @@ namespace MonsterBattler
             bottomText
             };
         }
-
-        // `NiceMenu` moved to `UI.NiceMenu` for reuse across the app.
-        public void NewAbility()
+        public void NewAbility(int maxTier)
         {
             ActionFactory factory = new ActionFactory();
 
-            // All ability names registered inside ActionFactory
+            // All actions from factory
             List<string> allAbilities = factory.GetAllActionNames().ToList();
 
-            // Player already owns these types
+            // Who the player already owns
             HashSet<string> ownedNames = Actions
                 .Select(a => a.GetType().Name)
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-            // Get abilities the player does NOT already own
-            List<string> newAbilityNames = allAbilities
+            // Get only *new* actions player does not have
+            List<string> unownedAbilities = allAbilities
                 .Where(a => !ownedNames.Contains(a))
                 .ToList();
 
-            // Menu header
+            // IMPORTANT:
+            // Now filter by tier — ONLY allow abilities <= maxTier
+            List<string> validAbilityNames = unownedAbilities
+                .Where(a =>
+                {
+                    var instance = factory.Create(a)!;
+                    int tier = instance switch
+                    {
+                        Attack atk => atk.Tier,
+                        Buff buf => buf.Tier,
+                        _ => 1
+                    };
+                    return tier <= maxTier;
+                })
+                .ToList();
+
+            // Build Header UI
             List<string> menuHeader = new()
     {
-        $"{Name} Turn!",
+        $"{Name} – Choose ability (Tier allowed: {maxTier})",
         "Currently owned abilities:"
     };
 
@@ -95,42 +109,40 @@ namespace MonsterBattler
                 foreach (var action in Actions)
                 {
                     if (action is Attack atk)
-                        menuHeader.Add($"  {atk.Name} - {atk.GetInfo(this)}");
+                        menuHeader.Add($"  {atk.Name} (Tier {atk.Tier}) - {atk.GetInfo(this)}");
                     else if (action is Buff buf)
-                        menuHeader.Add($"  {buf.Name} - {buf.GetInfo(this)}");
-                    else
-                        menuHeader.Add($"  {action.GetType().Name}");
+                        menuHeader.Add($"  {buf.Name} (Tier {buf.Tier}) - {buf.GetInfo(this)}");
                 }
             }
 
             menuHeader.Add("");
-            menuHeader.Add("Choose new abilities from below:");
+            menuHeader.Add("Choose new ability:");
 
-            // Build menu items from NEW abilities
+            // Build menu items from filtered abilities
             List<string> menuItems = new();
-            foreach (var abilityName in newAbilityNames)
+            foreach (var abilityName in validAbilityNames)
             {
                 var instance = factory.Create(abilityName)!;
 
                 if (instance is Attack atk)
-                    menuItems.Add($"{atk.Name} - {atk.GetInfo(this)}");
+                    menuItems.Add($"{atk.Name} (Tier {atk.Tier}) - {atk.GetInfo(this)}");
                 else if (instance is Buff buf)
-                    menuItems.Add($"{buf.Name} - {buf.GetInfo(this)}");
+                    menuItems.Add($"{buf.Name} (Tier {buf.Tier}) - {buf.GetInfo(this)}");
                 else
-                    menuItems.Add(abilityName);
+                    menuItems.Add($"{abilityName}");
             }
 
-            menuItems.Add("No Attack");
+            menuItems.Add("No Ability");
 
             int choice = UI.NiceMenu(menuHeader.ToArray(), menuItems);
 
-            if (choice >= 0 && choice < newAbilityNames.Count)
+            if (choice >= 0 && choice < validAbilityNames.Count)
             {
-                string chosenName = newAbilityNames[choice];
-                var newAbility = factory.Create(chosenName)!;
+                string chosen = validAbilityNames[choice];
+                var newAbility = factory.Create(chosen)!;
 
                 Actions.Add(newAbility);
-                Console.WriteLine($"Added ability: {chosenName}");
+                Console.WriteLine($"Added ability: {chosen}");
             }
             else
             {
