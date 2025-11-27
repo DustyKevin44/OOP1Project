@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dusty\\Documents\\testcsfolder\\OOP1SPEL\\OOP1SPEL.csproj": {}
+    "c:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\OOP1SPEL.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dusty\\Documents\\testcsfolder\\OOP1SPEL\\OOP1SPEL.csproj": {
+    "c:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\OOP1SPEL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dusty\\Documents\\testcsfolder\\OOP1SPEL\\OOP1SPEL.csproj",
+        "projectUniqueName": "c:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\OOP1SPEL.csproj",
         "projectName": "OOP1SPEL",
-        "projectPath": "C:\\Users\\Dusty\\Documents\\testcsfolder\\OOP1SPEL\\OOP1SPEL.csproj",
-        "packagesPath": "C:\\Users\\Dusty\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dusty\\Documents\\testcsfolder\\OOP1SPEL\\obj\\",
+        "projectPath": "c:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\OOP1SPEL.csproj",
+        "packagesPath": "C:\\Users\\kajsa\\.nuget\\packages\\",
+        "outputPath": "c:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Dusty\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\kajsa\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -65,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
