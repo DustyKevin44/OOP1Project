@@ -123,7 +123,6 @@ static class RoundInitiator
 
                     NewFight(chars);
                     chars.Remove(e);
-                    // Add your logic here
                     break;
                 }
 
@@ -133,7 +132,6 @@ static class RoundInitiator
                     chars.Add(e);
                     NewFight(chars);
                     chars.Remove(e);
-                    // Add your logic here
                     break;
                 }
 
@@ -143,7 +141,6 @@ static class RoundInitiator
                     chars.Add(e);
                     NewFight(chars);
                     chars.Remove(e);
-                    // Add your logic here
                     break;
                 }
 
@@ -153,7 +150,6 @@ static class RoundInitiator
                     chars.Add(e);
                     NewFight(chars);
                     chars.Remove(e);
-                    // Add your logic here
                     break;
                 }
 
@@ -163,7 +159,6 @@ static class RoundInitiator
                     chars.Add(e);
                     NewFight(chars);
                     chars.Remove(e);
-                    // Add your logic here
                     break;
                 }
 
@@ -173,7 +168,6 @@ static class RoundInitiator
                     chars.Add(e);
                     NewFight(chars);
                     chars.Remove(e);
-                    // Add your logic here
                     break;
                 }
 
@@ -189,10 +183,8 @@ static class RoundInitiator
 
     static void CreatePlayerAndBattle()
     {
-        // Get player name
         Player player = CreatePlayer();
 
-        // Let player choose abilities
         Console.WriteLine($"\nWelcome, {player.Name}!");
         System.Threading.Thread.Sleep(1000);
 
@@ -211,7 +203,6 @@ static class RoundInitiator
         player.NewAbility(1);
         player.NewAbility(3);
 
-        // Enter combat loop
         bool continueBattle = true;
         while (continueBattle)
         {
@@ -312,11 +303,9 @@ static class RoundInitiator
         }
         else
         {
-            // Custom levels
             enemy.LevelUpCustom();
         }
 
-        // Add abilities to enemy
         AddAbilitiesToEnemy(enemy);
 
         return enemy;
@@ -333,7 +322,6 @@ static class RoundInitiator
         ""
         };
 
-        // Get all abilities registered inside ActionFactory
         List<string> allAbilities = factory.GetAllActionNames().ToList();
         allAbilities.Add("Done Adding Abilities");
 
@@ -341,7 +329,6 @@ static class RoundInitiator
 
         while (addingAbilities)
         {
-            // Filter out already-learned abilities
             var available = allAbilities
                 .Where(a =>
                     a == "Done Adding Abilities" ||
@@ -376,13 +363,11 @@ static class RoundInitiator
 
         int current = rand.Next(0, 2);
 
-        // Start combat and allow retry loops
         CombatManager.StartFight(chars);
         bool retryLoop;
         do
         {
             Animation.NewFightAnimation(chars[current]);
-            // Fight loop
             while (chars[0].IsAlive() && chars[1].IsAlive() && !CombatManager.FightEnded)
             {
                 Console.Clear();
@@ -397,7 +382,6 @@ static class RoundInitiator
                 current = 1 - current;
             }
 
-            // Ask combat manager to show appropriate end screen and decide retry
             retryLoop = CombatManager.PromptEndFight();
 
         } while (retryLoop);

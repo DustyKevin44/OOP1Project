@@ -66,21 +66,17 @@ namespace MonsterBattler
         {
             ActionFactory factory = new ActionFactory();
 
-            // All actions from factory
             List<string> allAbilities = factory.GetAllActionNames().ToList();
 
-            // Who the player already owns
             HashSet<string> ownedNames = Actions
                 .Select(a => a.GetType().Name)
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-            // Get only *new* actions player does not have
             List<string> unownedAbilities = allAbilities
                 .Where(a => !ownedNames.Contains(a))
                 .ToList();
 
-            // IMPORTANT:
-            // Now filter by tier — ONLY allow abilities <= maxTier
+           
             List<string> validAbilityNames = unownedAbilities
                 .Where(a =>
                 {
@@ -95,7 +91,6 @@ namespace MonsterBattler
                 })
                 .ToList();
 
-            // Build Header UI
             List<string> menuHeader = new()
     {
         $"{Name} – Choose ability (Tier allowed: {maxTier})",
@@ -118,7 +113,6 @@ namespace MonsterBattler
             menuHeader.Add("");
             menuHeader.Add("Choose new ability:");
 
-            // Build menu items from filtered abilities
             List<string> menuItems = new();
             foreach (var abilityName in validAbilityNames)
             {
