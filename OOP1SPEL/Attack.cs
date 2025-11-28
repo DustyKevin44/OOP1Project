@@ -25,7 +25,6 @@ namespace MonsterBattler
         string GetInfo(Character sender);
     }
 
-    // ==================== BUFFS ====================
     public abstract class Buff : IAction, IBuff
     {
         public string Name { get; protected set; }
@@ -75,7 +74,6 @@ namespace MonsterBattler
         }
     }
 
-    // ==================== BASE ATTACK ====================
     public class Attack : IAttack, IAction
     {
         private static readonly Random rng = new Random();
@@ -154,7 +152,6 @@ namespace MonsterBattler
         }
     }
 
-    // ==================== ATTACKS WITH TIERS ====================
     public class Ram : Attack
     {
         public Ram()

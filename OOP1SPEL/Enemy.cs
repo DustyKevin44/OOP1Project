@@ -4,7 +4,6 @@ public class Enemy : Character
 {
     private static readonly Random rng = new();
 
-    // Constructor: everything defaults to 1
     public Enemy(string name)
         : base(name, strength: 1, vitality: 1, intelligence: 1, dexterity: 1)
     {
@@ -19,16 +18,6 @@ public class Enemy : Character
     {
     }
 
-    /// <summary>
-    /// Level up enemy with either random upgrades or specified ones.
-    /// </summary>
-    /// <param name="randomLevels">How many random attribute increases.
-    /// If > 0, random mode is used and the specific attributes are ignored.</param>
-    /// <param name="str">Strength increase</param>
-    /// <param name="vit">Vitality increase</param>
-    /// <param name="intel">Intelligence increase</param>
-    /// <param name="dex">Dexterity increase</param>
-    /// <param name="armor">Armor increase</param>
     public void LevelUp(
         int randomLevels = 1,
         int str = 0,
@@ -45,7 +34,6 @@ public class Enemy : Character
             ApplySpecificLevelUps(str, vit, intel, dex);
         }
 
-        // Ensure health scales properly when vitality changes
         Health = MaxHealth;
     }
 
@@ -61,7 +49,7 @@ public class Enemy : Character
     {
         for (int i = 0; i < count; i++)
         {
-            int roll = rng.Next(5); // 0–4 → 5 attributes
+            int roll = rng.Next(5); 
 
             switch (roll)
             {
@@ -73,9 +61,6 @@ public class Enemy : Character
         }
     }
 
-    /// <summary>
-    /// Interactive menu for customizing enemy attributes
-    /// </summary>
     public void LevelUpCustom()
     {
         bool levelingUp = true;
@@ -136,8 +121,6 @@ public class Enemy : Character
                     break;
             }
         }
-
-        // Update health to match new vitality
         Health = MaxHealth;
     }
 
@@ -149,12 +132,11 @@ public class Enemy : Character
             return;
         }
 
-        int choice = rng.Next(Actions.Count); // pick random index
+        int choice = rng.Next(Actions.Count); 
         IAction selectedAction = Actions[choice];
 
         Console.WriteLine($"{Name} uses {selectedAction.GetType().Name}!");
 
-        // Execute the chosen action
         selectedAction.Execute(this, target);
     }
 }

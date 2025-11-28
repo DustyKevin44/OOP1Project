@@ -235,10 +235,8 @@ public class RoundInitiator
     // Now an instance method so it can use the injected factory for enemy creation/abilities.
     public void CreatePlayerAndBattle()
     {
-        // Get player name
         Player player = CreatePlayer();
 
-        // Let player choose abilities
         Console.WriteLine($"\nWelcome, {player.Name}!");
         System.Threading.Thread.Sleep(1000);
 
@@ -257,7 +255,6 @@ public class RoundInitiator
         player.NewAbility(1);
         player.NewAbility(3);
 
-        // Enter combat loop
         bool continueBattle = true;
         while (continueBattle)
         {
@@ -357,7 +354,6 @@ public class RoundInitiator
         }
         else
         {
-            // Custom levels
             enemy.LevelUpCustom();
         }
 
@@ -386,7 +382,6 @@ public class RoundInitiator
 
         while (addingAbilities)
         {
-            // Filter out already-learned abilities
             var available = allAbilities
                 .Where(a =>
                     a == "Done Adding Abilities" ||
@@ -429,7 +424,6 @@ public class RoundInitiator
 
         int current = rand.Next(0, 2);
 
-        // Start combat and allow retry loops
         CombatManager.StartFight(chars);
         bool retryLoop;
         do
@@ -450,7 +444,6 @@ public class RoundInitiator
                 current = 1 - current;
             }
 
-            // Ask combat manager to show appropriate end screen and decide retry
             retryLoop = CombatManager.PromptEndFight();
 
         } while (retryLoop);
