@@ -75,7 +75,6 @@ public class RoundInitiator
     {
         Enemy e = new Enemy(enemyName);
         chars[1] = e;
-        chars[0]!.LevelUp();
         return e;
     }
 
@@ -96,6 +95,7 @@ public class RoundInitiator
             case 0:
                 {
                     Player p1 = CreatePlayer();
+                    p1.NewAbility(1);
                     chars[0] = p1;
                     RoundInitiater(p1, 1);
                     break;
@@ -103,33 +103,31 @@ public class RoundInitiator
 
             case 1:
                 {
-                    chars[0] = player; // ensure player reference stored
-
+                    chars[0] = player;
+                    player!.Actions.Add(new HealingPotion()!);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Animation.ShowText(new string[]
                     {
-                        "You wake up in the middle of an enchanted forest",
-                        "An eerie sound of monsters is quickly approaching"
+                        "You wake up in the heart of an enchanted forest",
+                        "An eerie chorus of monsters cries is rapidly closing in."
                     });
+                    Console.ResetColor();
 
                     Enemy e = StartRound(chars, "Zombie");
-                    e.LevelUp(2, 0, 0, 0);
+                    e.LevelUp(0, 2, 0, 0, 0);
 
-                    // Use injected factory
                     var ram = _actionFactory.Create("Ram")!;
                     e.Actions.Add(ram);
 
                     EndRound(chars);
                     break;
                 }
-
             case 2:
                 {
                     chars[0] = player;
                     Enemy e = StartRound(chars, "Enraged Zombie");
-                    e.LevelUp(0, 3, 2, 0, 0);
+                    e.LevelUp(0, 2, 1, 0, 0);
 
-                    var berserkStrike = _actionFactory.Create("BerserkStrike")!;
-                    e.Actions.Add(berserkStrike);
                     var ram = _actionFactory.Create("Ram")!;
                     e.Actions.Add(ram);
 
@@ -141,9 +139,11 @@ public class RoundInitiator
                 {
                     chars[0] = player;
                     Enemy e = StartRound(chars, "Skeleton");
-                    e.LevelUp(0, 0, 2, 3, 1);
+                    e.LevelUp(0, 0, 2, 1, 1);
+
                     var fireBall = _actionFactory.Create("FireBall")!;
                     e.Actions.Add(fireBall);
+
                     var recoilShot = _actionFactory.Create("RecoilShot")!;
                     e.Actions.Add(recoilShot);
 
@@ -154,56 +154,72 @@ public class RoundInitiator
             case 4:
                 {
                     chars[0] = player;
-
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Animation.ShowText(new string[]
                     {
-                        "As you continue to wander through the forest you find your way towards a swamp"
-
+                        "As you continue to wander through the forest you find your way towards a murky swamp",
+                        "As there is no way around it, you have no choice but to enter"
                     });
+                    Console.ResetColor();
 
-                    Enemy e = StartRound(chars, "Goblin");
-                    e.LevelUp(0, 0, 3);
+                    Enemy e = StartRound(chars, "Daggelito🪱🪱🪱🪱🪱🪱🪱");
+                    e.LevelUp(0, 2, 2);
 
-                    // Use injected factory (fixed reference)
-                    var ability = _actionFactory.Create("SomeGoblinAbility");
-                    if (ability != null)
-                        e.Actions.Add(ability);
+                    var ram = _actionFactory.Create("Ram")!;
+                    e.Actions.Add(ram);
+                    var berserkStrike = _actionFactory.Create("BerserkStrike")!;
+                    e.Actions.Add(berserkStrike);
 
                     EndRound(chars);
                     break;
                 }
 
             case 5:
-                break;
-
-            case 6:
-                break;
-
-            case 7:
                 {
                     chars[0] = player;
-                    
-                    Animation.ShowText(new string[]
-                    {
-                        "You choose to enter and explore"
-                    });
 
-                    Enemy e = StartRound(chars, "Gigantic Spider");
-                    e.LevelUp(0, 3, 2, 0, 0);
+                    Enemy e = StartRound(chars, "Mutated Swamp Serpent");
+                    e.LevelUp(0, 1, 2, 1, 0);
 
-                    var berserkStrike = _actionFactory.Create("BerserkStrike")!;
-                    e.Actions.Add(berserkStrike);
+                    var recoilShot = _actionFactory.Create("RecoilShot")!;
+                    e.Actions.Add(recoilShot);
+
+                    var weakenEnemy = _actionFactory.Create("WeakenEnemy")!;
+                    e.Actions.Add(weakenEnemy);
+
+                    EndRound(chars);
+                    break;
+
+                }
+            case 6:
+                {
+                    chars[0] = player;
+
+                    Enemy e = StartRound(chars, "Guardian of the swamp");
+                    e.LevelUp(0, 3, 1, 2, 0);
+
+                    var poisonGas = _actionFactory.Create("PoisonGas")!;
+                    e.Actions.Add(poisonGas);
                     var ram = _actionFactory.Create("Ram")!;
                     e.Actions.Add(ram);
 
                     EndRound(chars);
                     break;
                 }
-            case 8:
+            case 7:
                 {
                     chars[0] = player;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Animation.ShowText(new string[]
+                    {
+                        "As you make your way out of the swamp you come across a mysterious cave",
+                        "You choose to enter and explore"
+                    });
+                    Console.ResetColor();
+
                     Enemy e = StartRound(chars, "Fire Golem");
                     e.LevelUp(0, 3, 2, 2, 0);
+
 
                     var fireBall = _actionFactory.Create("FireBall")!;
                     e.Actions.Add(fireBall);
@@ -213,16 +229,61 @@ public class RoundInitiator
                     EndRound(chars);
                     break;
                 }
-            case 9:
-                break;
-
-            case 10:
+            case 8:
                 {
                     chars[0] = player;
-                    Enemy e = StartRound(chars, "");
+
+                    Enemy e = StartRound(chars, "Gigantic Spider");
+                    e.LevelUp(0, 3, 2, 2, 0);
+
+                    var webSnare = _actionFactory.Create("WebSnare")!;
+                    e.Actions.Add(webSnare);
+                    var weakenEnemy = _actionFactory.Create("WeakenEnemy")!;
+                    e.Actions.Add(weakenEnemy);
+
                     EndRound(chars);
                     break;
                 }
+            case 9:
+                {
+                    chars[0] = player;
+
+                    Enemy e = StartRound(chars, "EchoStalker");
+                    e.LevelUp(0, 3, 2, 2, 0);
+
+                    var recoilShot = _actionFactory.Create("RecoilShot")!;
+                    e.Actions.Add(recoilShot);
+
+                    var weakenEnemy = _actionFactory.Create("WeakenEnemy")!;
+                    e.Actions.Add(weakenEnemy);
+
+                    EndRound(chars);
+                    break;
+                }
+
+            case 10:
+                {  //en till attack? + textttt
+                    chars[0] = player;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Animation.ShowText(new string[]
+                    {
+                        
+                    });
+                    Console.ResetColor();
+
+                    Enemy e = StartRound(chars, "Satanic Priest");
+                    e.LevelUp(0, 0, 2, 3, 2);
+
+                    var bloodOffering = _actionFactory.Create("BloodOffering")!;
+                    e.Actions.Add(bloodOffering);
+
+                    var summoning = _actionFactory.Create("Summoning")!;
+                    e.Actions.Add(summoning);
+
+                    EndRound(chars);
+                    break;
+                }
+                // lägga till en mage m alla spells  och en mirror fiende som har samma stats och attacker som playern
 
             default:
                 {

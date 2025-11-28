@@ -78,6 +78,22 @@ namespace MonsterBattler
             Animation.Heal(se);
         }
     }
+    public class IntelligenceCrystal : Item
+    {
+        private readonly int _intelligenceGain = 1;
+        public IntelligenceCrystal()
+        {
+            Name = "Intelligence Crystal";
+            Desc = "Grants 1 intelligence permanently.";
+        }
+
+        protected override void Use(Character se, Character? re = null)
+        {
+            se.Strength += _intelligenceGain;
+            Console.WriteLine($"{se.Name} consumes an Intelligence Crystal and gains {_intelligenceGain} Intelligence!");
+            
+        }
+    }
 
     // Web Trap: reduces target's Dexterity
     public class WebTrap : Item

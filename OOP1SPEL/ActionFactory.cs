@@ -22,8 +22,10 @@ public class ActionFactory
             { "BloodOffering", () => new BloodOffering() },
             { "HealBuff", () => new HealBuff() },
             { "WeakenEnemy", () => new WeakenEnemy() },
-            { "HealingPotion", () => new HealingPotion()}
-            
+            { "HealingPotion", () => new HealingPotion() },
+            { "PoisonGas", () => new PoisonGas() },
+            { "Summining", () => new Summoning() }
+
         };
     }
 

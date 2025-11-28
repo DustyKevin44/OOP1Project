@@ -18,6 +18,7 @@ namespace MonsterBattler
             Console.WriteLine(bottom);
             Console.WriteLine("__________________________________________________________________");
         }
+        
         public static void ShootAnimation(Character sender, Character receiver, string attackSymbol)
         {
             string r = $"{receiver.Name} ({receiver.Health})";
@@ -33,6 +34,44 @@ namespace MonsterBattler
                     (i == 2 ? $"                            {attackSymbol}" : " "),
                     (i == 1 ? $"                      {attackSymbol}" : " "),
                     (i == 0 ? $" {s}  " : $" {s}  ")                           // Sender on bottom
+                );
+                Thread.Sleep(150);
+            }
+        }
+        public static void PoisonGasAnimation(Character sender, Character receiver, string aS)
+        {
+            string r = $"{receiver.Name} ({receiver.Health})";
+            string s = $"{sender.Name} ({sender.Health})";
+
+            for (int i = 0; i < 7; i++) // same number of steps as Fireball
+            {
+                DrawFrame(
+                    $"                                                    {r}",
+                    (i == 5 ? $"  {aS}    {aS}   {aS}   {aS}" : " "),
+                    (i == 4 ? $"       {aS}    {aS}  {aS}" : " "),
+                    (i == 3 ? $" {aS}   {aS}     {aS}   {aS}" : " "),
+                    (i == 2 ? $"   {aS}       {aS}       {aS}" : " "),
+                    (i == 1 ? $"         {aS}      {aS}" : " "),
+                    (i == 0 ? $" {s}  " : $" {s}  ")                         
+                );
+                Thread.Sleep(150);
+            }
+        }
+        public static void ReceivePoisonGasAnimation(Character sender, Character receiver, string aS)
+        {
+            string r = $"{receiver.Name} ({receiver.Health})";
+            string s = $"{sender.Name} ({sender.Health})";
+
+            for (int i = 0; i < 6; i++)
+            {
+                DrawFrame(
+                    $"                                                  {s}",
+                    (i == 1 ? $" {aS}   {aS}   {aS}  {aS}" : $"{aS}  {aS}      {aS} "),
+                    (i % 2 == 0 ? $"  {aS}  {aS}   {aS}" : $"{aS}    {aS}   {aS}   {aS} "),
+                    (i % 2 == 0 ? $"{aS}     {aS}    {aS}   {aS}" : $" {aS}   {aS} {aS}    {aS}") ,
+                    (i % 2 == 0 ? $" {aS}  {aS}  {aS}" : $"{aS}    {aS}    {aS}  {aS}"),
+                    (i== 5 ? $"{aS}{r}{aS}": $" {r}"),
+                    ""
                 );
                 Thread.Sleep(150);
             }
@@ -173,6 +212,30 @@ namespace MonsterBattler
                 Thread.Sleep(180);
             }
         }
+        public static void RecieveSummoningAnimation(Character sender, Character receiver)
+        {
+            string r = $"{receiver.Name} ({receiver.Health})";
+            string s = $"{sender.Name} ({sender.Health})";
+
+            for (int i = 0; i < 7; i++) // same number of steps as Fireball
+            {
+//     /\   
+// -.-/--\-,- 
+//   /-.,-\
+//  /,-''-.\
+                DrawFrame(
+                               // Receiver on top
+                    (i >= 5 ? $"             __________                      " : " "),
+                    (i >= 4 ? $"            /    /\\   \\                         " : " "),
+                    (i >= 3 ? (i == 6 ?  $"           / -.-/-{r}\\-,-\\                     " : "$           / -.-/--\\-,-\\                     ") : "" ),
+                    (i >= 2 ? $"          \\   /-.,-\\   /                      " : " "),
+                    (i >= 1 ? $"           \\ /,-''-.\\ /                         " : " "),
+                    (i >= 0 ? $"            \\_________/    " : $" {s}  "),                    
+                    $"{r}"       // Sender on bottom
+                );
+                Thread.Sleep(150);
+            }
+        }
 
         
         public static void ShowDamage(Character target, int damage, string symbol = "💥")
@@ -273,7 +336,7 @@ namespace MonsterBattler
         public static void ShowText(string[] msgs)
         {
             
-            for (int i = 0; i < msgs.Length - 1; i++)
+            for (int i = 0; i < msgs.Length; i++)
             {
                 DrawFrame(
                     "", "", "",

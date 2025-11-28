@@ -80,7 +80,7 @@ namespace MonsterBattler
 
         public string Name { get; protected set; } = "No Name";
         public int Damage { get; protected set; } = 0;
-        public int DexterityDamage { get; protected set; } = 0;
+       
         public string Desc { get; protected set; } = "No description";
         public int Tier { get; protected set; } = 1;
         public DamageTypes DType = DamageTypes.None;
@@ -291,8 +291,9 @@ namespace MonsterBattler
     public class WebSnare : Attack
     {
         public WebSnare()
-        {
-            Name = "Websnare"; Dexterity = 1; DType = DamageTypes.Physical; Tier = 2;
+        { //fixa dexterity
+
+            Name = "Websnare"; Damage = 1; DType = DamageTypes.Physical; Tier = 2;
             Desc = "Fires sticky webs that slows the enemies movement permanently.";
         }
 
@@ -302,6 +303,58 @@ namespace MonsterBattler
                 Animation.ShootAnimation(sender, receiver, "🕸️");
             else
                 Animation.ReceiveShootAnimation(sender, receiver, "🕸️");
+        }
+          public override void Execute(Character sender, Character? receiver)
+        {
+            // Extra step before base
+            Random rnd = new();
+            int randomNumber = rnd.Next(1,3);
+            // If the sender died from the sacrifice, abort and let death handling run immediately
+            if (randomNumber == 2)
+            {
+                Console.WriteLine($"{receiver} got trapped! -1 Dexterity!");
+                receiver!.Dexterity = Math.Min(1, receiver.Dexterity-1);
+            }
+            else
+            {
+                Console.WriteLine($"{receiver} did not get trapped in the web!");
+            }
+            // Call centralized base Execute
+            base.Execute(sender, receiver);
+        }
+        
+    }
+    public class PoisonGas : Attack
+    {
+        public PoisonGas()
+        {
+            Name = "PoisonGas"; Damage = 2; DType = DamageTypes.Magical; Tier = 2;
+            //ska även sakta ner fienden
+            Desc = "Poisonous gas that damages and permanently lowers max hp.";
+        }
+
+        public override void PlayAnimation(Character sender, Character receiver)
+        {
+            if (sender is Player)
+                Animation.PoisonGasAnimation(sender, receiver, "☁️");
+            else
+                Animation.ReceivePoisonGasAnimation(sender, receiver, "☁️");
+        }
+    }
+    public class Summoning : Attack
+    {
+        public Summoning()
+        {
+            Name = "Summoning"; Damage = 2; DType = DamageTypes.Magical; Tier = 3;
+            Desc = "Poisonous gas that damages and permanently lowers max hp.";
+        }
+
+        public override void PlayAnimation(Character sender, Character receiver)
+        {
+            if (sender is Player)
+                Animation.RecieveSummoningAnimation(sender, receiver);
+            else
+                Animation.RecieveSummoningAnimation(sender, receiver);
         }
     }
 
