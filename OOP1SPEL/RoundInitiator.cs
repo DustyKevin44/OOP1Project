@@ -3,38 +3,50 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace MonsterBattler;
 
-static class RoundInitiator
+public class RoundInitiator
 {
-    public static void MainMenu()
+    private readonly ActionFactory _actionFactory;
+
+    public RoundInitiator(ActionFactory actionFactory)
     {
+        _actionFactory = actionFactory ?? throw new ArgumentNullException(nameof(actionFactory));
+    }
+
+    // Keep MainMenu static but create one RoundInitiator with the factory provided here.
+    public void MainMenu()
+    {
+        // Create ONE shared ActionFactory and ONE shared RoundInitiator that will be reused.
+        var sharedFactory = new ActionFactory();
+        var roundSystem = new RoundInitiator(sharedFactory);
+
         bool running = true;
 
         while (running)
         {
             string[] header = new string[]
             {
-                        "════════════════════════════",
-                        "     MONSTER BATTLER ARENA",
-                        "════════════════════════════",
-                        ""
+                "════════════════════════════",
+                "     MONSTER BATTLER ARENA",
+                "════════════════════════════",
+                ""
             };
 
             List<string> menuItems = new List<string>
-                    {
-                        "Create Player & Battle",
-                        "Story mode",
-                        "Quit"
-                    };
+            {
+                "Create Player & Battle",
+                "Story mode",
+                "Quit"
+            };
 
             int choice = UI.NiceMenu(header, menuItems);
 
             switch (choice)
             {
                 case 0:
-                    CreatePlayerAndBattle();
+                    roundSystem.CreatePlayerAndBattle();
                     break;
                 case 1:
-                    RoundInitiater(null, 0);
+                    roundSystem.RoundInitiater(null, 0);
                     break;
                 case 2:
                     running = false;
@@ -44,6 +56,8 @@ static class RoundInitiator
             }
         }
     }
+
+    // These helper methods do not require the factory and can remain static.
     static Player CreatePlayer()
     {
         Console.Clear();
@@ -57,123 +71,156 @@ static class RoundInitiator
         return new Player(playerName, 1, 1, 1, 1);
     }
 
-    static void RoundInitiater(Player player, int round)
+    static Enemy StartRound(Character?[] chars, string enemyName)
     {
-        ActionFactory factory = new ActionFactory();
-        List<Character> chars = new List<Character> { };
+        Enemy e = new Enemy(enemyName);
+        chars[1] = e;
+        chars[0]!.LevelUp();
+        return e;
+    }
+
+    static void EndRound(Character?[] chars)
+    {
+        NewFight(chars);
+        chars[1] = null;
+        chars[0]!.LevelUp();
+    }
+
+    // Instance method — uses the injected _actionFactory for creating actions.
+    public void RoundInitiater(Player? player, int round)
+    {
+        Character?[] chars = new Character?[2];
 
         switch (round)
         {
             case 0:
                 {
                     Player p1 = CreatePlayer();
-                    chars.Add(p1);
+                    chars[0] = p1;
                     RoundInitiater(p1, 1);
                     break;
                 }
 
             case 1:
                 {
+                    chars[0] = player; // ensure player reference stored
+
                     Animation.ShowText(new string[]
                     {
-            "You wake up in the middle of an enchanted forest",
-            "An eerie sound of monsters is quickly approaching"
+                        "You wake up in the middle of an enchanted forest",
+                        "An eerie sound of monsters is quickly approaching"
                     });
-                    Enemy e = new Enemy("Zombie");
-                    chars.Add(e);
-                    NewFight(chars);
-                    chars.Remove(e);
-                    player.LevelUp();
+
+                    Enemy e = StartRound(chars, "Zombie");
+                    e.LevelUp(2, 0, 0, 0);
+
+                    // Use injected factory
+                    var ram = _actionFactory.Create("Ram")!;
+                    e.Actions.Add(ram);
+
+                    EndRound(chars);
                     break;
                 }
 
             case 2:
                 {
-                    Enemy e1 = new Enemy("Healthy zombie", 1, 3, 1, 1);
-                    e1.Actions.Add(factory.Create("Ram")!);
-                    chars[1] = e1;
-                    NewFight(chars);
+                    chars[0] = player;
+                    Enemy e = StartRound(chars, "Enraged Zombie");
+                    e.LevelUp(0, 3, 2, 0, 0);
+
+                    var berserkStrike = _actionFactory.Create("BerserkStrike")!;
+                    e.Actions.Add(berserkStrike);
+                    var ram = _actionFactory.Create("Ram")!;
+                    e.Actions.Add(ram);
+
+                    EndRound(chars);
                     break;
                 }
 
             case 3:
                 {
-                    Enemy e2 = new Enemy("Enraged zombie", 3, 2, 1, 1);
-                    e2.Actions.Add(factory.Create("Ram")!);
-                    e2.Actions.Add(factory.Create("BersekStrike")!);
+                    chars[0] = player;
+                    Enemy e = StartRound(chars, "Skeleton");
+                    e.LevelUp(0, 0, 2, 3, 1);
+                    var fireBall = _actionFactory.Create("FireBall")!;
+                    e.Actions.Add(fireBall);
+                    var recoilShot = _actionFactory.Create("RecoilShot")!;
+                    e.Actions.Add(recoilShot);
+
+                    EndRound(chars);
                     break;
                 }
 
             case 4:
                 {
+                    chars[0] = player;
+
                     Animation.ShowText(new string[]
                     {
-            "As you continue to wander through the forest you find your way towards a mysterious looking cave",
-            "You choose to enter and explore"
+                        "As you continue to wander through the forest you find your way towards a swamp"
+
                     });
 
-                    Enemy e3 = new Enemy("");
+                    Enemy e = StartRound(chars, "Goblin");
+                    e.LevelUp(0, 0, 3);
+
+                    // Use injected factory (fixed reference)
+                    var ability = _actionFactory.Create("SomeGoblinAbility");
+                    if (ability != null)
+                        e.Actions.Add(ability);
+
+                    EndRound(chars);
                     break;
                 }
 
             case 5:
-                {
-                    Enemy e = new Enemy("Zombie");
-                    chars.Add(e);
-
-                    NewFight(chars);
-                    chars.Remove(e);
-                    // Add your logic here
-                    break;
-                }
+                break;
 
             case 6:
-                {
-                    Enemy e = new Enemy("Zombie");
-                    chars.Add(e);
-                    NewFight(chars);
-                    chars.Remove(e);
-                    // Add your logic here
-                    break;
-                }
+                break;
 
             case 7:
                 {
-                    Enemy e = new Enemy("Zombie");
-                    chars.Add(e);
-                    NewFight(chars);
-                    chars.Remove(e);
-                    // Add your logic here
+                    chars[0] = player;
+                    
+                    Animation.ShowText(new string[]
+                    {
+                        "You choose to enter and explore"
+                    });
+
+                    Enemy e = StartRound(chars, "Gigantic Spider");
+                    e.LevelUp(0, 3, 2, 0, 0);
+
+                    var berserkStrike = _actionFactory.Create("BerserkStrike")!;
+                    e.Actions.Add(berserkStrike);
+                    var ram = _actionFactory.Create("Ram")!;
+                    e.Actions.Add(ram);
+
+                    EndRound(chars);
                     break;
                 }
-
             case 8:
                 {
-                    Enemy e = new Enemy("Zombie");
-                    chars.Add(e);
-                    NewFight(chars);
-                    chars.Remove(e);
-                    // Add your logic here
-                    break;
-                }
+                    chars[0] = player;
+                    Enemy e = StartRound(chars, "Fire Golem");
+                    e.LevelUp(0, 3, 2, 2, 0);
 
-            case 9:
-                {
-                    Enemy e = new Enemy("Zombie");
-                    chars.Add(e);
-                    NewFight(chars);
-                    chars.Remove(e);
-                    // Add your logic here
+                    var fireBall = _actionFactory.Create("FireBall")!;
+                    e.Actions.Add(fireBall);
+                    var berserkStrike = _actionFactory.Create("BerserkStrike")!;
+                    e.Actions.Add(berserkStrike);
+
+                    EndRound(chars);
                     break;
                 }
+            case 9:
+                break;
 
             case 10:
                 {
-                    Enemy e = new Enemy("Zombie");
-                    chars.Add(e);
-                    NewFight(chars);
-                    chars.Remove(e);
-                    // Add your logic here
+                    chars[0] = player;
+                    Enemy e = StartRound(chars, "");
+                    EndRound(chars);
                     break;
                 }
 
@@ -183,11 +230,10 @@ static class RoundInitiator
                     break;
                 }
         }
-
-
     }
 
-    static void CreatePlayerAndBattle()
+    // Now an instance method so it can use the injected factory for enemy creation/abilities.
+    public void CreatePlayerAndBattle()
     {
         // Get player name
         Player player = CreatePlayer();
@@ -215,7 +261,6 @@ static class RoundInitiator
         bool continueBattle = true;
         while (continueBattle)
         {
-
             Enemy? enemy = CreateEnemyMenu();
 
             if (enemy == null)
@@ -224,7 +269,7 @@ static class RoundInitiator
                 break;
             }
 
-            List<Character> combatants = new() { player, enemy };
+            Character?[] combatants = new Character?[] { player, enemy };
             NewFight(combatants);
 
             // Ask if player wants to continue
@@ -232,9 +277,9 @@ static class RoundInitiator
             {
                 string[] continueHeader = new string[]
                 {
-                            "━━━━━━━━━━━━━━━━━━━━",
-                            "Battle Complete!",
-                            ""
+                    "━━━━━━━━━━━━━━━━━━━━",
+                    "Battle Complete!",
+                    ""
                 };
 
                 List<string> continueMenu = new List<string> { "Challenge Another Enemy", "Return to Main Menu" };
@@ -250,17 +295,17 @@ static class RoundInitiator
         }
     }
 
-    static Enemy? CreateEnemyMenu()
+    // Instance version so AddAbilitiesToEnemy can use the injected factory instance.
+    public Enemy? CreateEnemyMenu()
     {
         string[] nameHeader = new string[]
         {
-                    "════════════════════════════",
-                    "    CREATE ENEMY",
-                    "════════════════════════════",
-                    ""
+            "════════════════════════════",
+            "    CREATE ENEMY",
+            "════════════════════════════",
+            ""
         };
         Thread.Sleep(200);
-
 
         Console.Clear();
         Console.WriteLine("════════════════════════════");
@@ -276,10 +321,10 @@ static class RoundInitiator
         // Level up menu
         string[] levelHeader = new string[]
         {
-                    "════════════════════════════",
-                    "    LEVEL UP ENEMY",
-                    "════════════════════════════",
-                    ""
+            "════════════════════════════",
+            "    LEVEL UP ENEMY",
+            "════════════════════════════",
+            ""
         };
 
         List<string> levelMenu = new List<string> { "Random Levels", "Custom Levels" };
@@ -290,10 +335,10 @@ static class RoundInitiator
             // Random levels
             string[] randomHeader = new string[]
             {
-                        "════════════════════════════",
-                        "    HOW MANY RANDOM LEVELS?",
-                        "════════════════════════════",
-                        ""
+                "════════════════════════════",
+                "    HOW MANY RANDOM LEVELS?",
+                "════════════════════════════",
+                ""
             };
 
             List<string> randomMenu = new List<string>();
@@ -316,25 +361,25 @@ static class RoundInitiator
             enemy.LevelUpCustom();
         }
 
-        // Add abilities to enemy
+        // Add abilities to enemy using the injected factory instance (no new factory).
         AddAbilitiesToEnemy(enemy);
 
         return enemy;
     }
-    static void AddAbilitiesToEnemy(Enemy enemy)
-    {
-        ActionFactory factory = new ActionFactory();
 
+    // Use the injected factory everywhere here (no new ActionFactory()).
+    public void AddAbilitiesToEnemy(Enemy enemy)
+    {
         string[] abilityHeader =
         {
-        "════════════════════════════",
-        $"    ADD ABILITIES TO {enemy.Name.ToUpper()}",
-        "════════════════════════════",
-        ""
+            "════════════════════════════",
+            $"    ADD ABILITIES TO {enemy.Name.ToUpper()}",
+            "════════════════════════════",
+            ""
         };
 
-        // Get all abilities registered inside ActionFactory
-        List<string> allAbilities = factory.GetAllActionNames().ToList();
+        // Get all abilities registered inside the injected ActionFactory
+        List<string> allAbilities = _actionFactory.GetAllActionNames().ToList();
         allAbilities.Add("Done Adding Abilities");
 
         bool addingAbilities = true;
@@ -359,7 +404,8 @@ static class RoundInitiator
             }
             else
             {
-                IAction? newAction = factory.Create(chosenName);
+                // Use injected factory instance
+                IAction? newAction = _actionFactory.Create(chosenName);
 
                 if (newAction != null)
                 {
@@ -367,10 +413,17 @@ static class RoundInitiator
                     Console.WriteLine($"Added {chosenName} to {enemy.Name}!");
                     System.Threading.Thread.Sleep(800);
                 }
+                else
+                {
+                    Console.WriteLine($"Could not create ability '{chosenName}'.");
+                    System.Threading.Thread.Sleep(600);
+                }
             }
         }
     }
-    static void NewFight(List<Character> chars)
+
+    // NewFight doesn't need factory — keep static.
+    static void NewFight(Character?[] chars)
     {
         Random rand = new();
 
@@ -381,13 +434,13 @@ static class RoundInitiator
         bool retryLoop;
         do
         {
-            Animation.NewFightAnimation(chars[current]);
+            Animation.NewFightAnimation(chars[current]!);
             // Fight loop
-            while (chars[0].IsAlive() && chars[1].IsAlive() && !CombatManager.FightEnded)
+            while (chars[0]!.IsAlive() && chars[1]!.IsAlive() && !CombatManager.FightEnded)
             {
                 Console.Clear();
-                Character active = chars[current];
-                Character target = chars[1 - current];
+                Character active = chars[current]!;
+                Character target = chars[1 - current]!;
                 Animation.TurnAnimation(active);
                 active.TakeTurn(target);
 
@@ -402,5 +455,4 @@ static class RoundInitiator
 
         } while (retryLoop);
     }
-
 }

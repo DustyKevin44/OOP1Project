@@ -6,7 +6,7 @@ public class ActionFactory
     // ============ Inkapsling ======================= 
     // Jag har denna dictionary som private readonly då 
     private readonly Dictionary<string, Func<IAction>> _registry;
-
+    
     public ActionFactory()
     {
         // Register abilities here.
@@ -20,9 +20,10 @@ public class ActionFactory
             { "RecoilShot", () => new RecoilShot() },
             { "GambleBolt", () => new GambleBolt() },
             { "BloodOffering", () => new BloodOffering() },
-            { "ArmorCrush", () => new ArmorCrush() },
             { "HealBuff", () => new HealBuff() },
-            { "WeakenEnemy", () => new WeakenEnemy() }
+            { "WeakenEnemy", () => new WeakenEnemy() },
+            { "HealingPotion", () => new HealingPotion()}
+            
         };
     }
 

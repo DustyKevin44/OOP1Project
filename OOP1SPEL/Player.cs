@@ -20,30 +20,88 @@ namespace MonsterBattler
                 return;
             }
 
-            List<string> menuItems = new() { "Actions", "Give Up" };
+            // Keep showing the action menu until the player performs an action or gives up
+            bool turnTaken = false;
+            while (!turnTaken)
+            {
+                List<string> menuItems = new() { "Actions", "Give Up" };
 
-            string[] header = BuildHeader(target, "Choose your action:");
-            int choice = UI.NiceMenu(header, menuItems);
+                string[] header = BuildHeader(target, "Choose your action:");
+                int choice = UI.NiceMenu(header, menuItems);
 
-            if (choice == 0)
-                AttackMenu(target);
-            else
-                GiveUp();
+                if (choice == 0)
+                {
+                    // AttackMenu returns true when an action was executed (consumes the turn).
+                    turnTaken = AttackMenu(target);
+                }
+                else
+                {
+                    GiveUp();
+                    turnTaken = true;
+                }
+            }
         }
 
-        public void AttackMenu(Character target)
+        // Returns true if an action was executed (turn consumed), false if player backed out
+        public bool AttackMenu(Character target)
         {
-            List<string> menuItems = Actions
-                .Select(a => a?.GetType().Name ?? "UNKNOWN")
-                .ToList();
+            bool showDescriptions = false;
 
-            menuItems.Add("Back");
+            while (true)
+            {
+                List<string> menuItems = new();
 
-            string[] header = BuildHeader(target, "Choose attack:");
-            int choice = UI.NiceMenu(header, menuItems);
+                // Build display entries depending on toggle
+                for (int i = 0; i < Actions.Count; i++)
+                {
+                    var a = Actions[i];
+                    if (a == null)
+                    {
+                        menuItems.Add("UNKNOWN");
+                        continue;
+                    }
 
-            if (choice < Actions.Count)
-                Actions[choice].Execute(this, target);
+                    if (!showDescriptions)
+                    {
+                        menuItems.Add(a.GetType().Name);
+                    }
+                    else
+                    {
+                        menuItems.Add($"{a.Name} - {a.GetInfo(this)}");
+                      
+                    }
+                }
+
+                // Add Toggle Description option just above Back
+                menuItems.Add(showDescriptions ? "Hide Descriptions" : "Toggle Description");
+                menuItems.Add("Back");
+
+                string[] header = BuildHeader(target, "Choose attack:");
+                int choice = UI.NiceMenu(header, menuItems);
+
+                // If player selected one of the actions
+                if (choice >= 0 && choice < Actions.Count)
+                {
+                    Actions[choice].Execute(this, target);
+                    return true; // action executed, consume turn
+                }
+
+                int toggleIndex = Actions.Count;
+                int backIndex = Actions.Count + 1;
+
+                if (choice == toggleIndex)
+                {
+                    showDescriptions = !showDescriptions;
+                    // continue loop to redraw menu
+                    continue;
+                }
+
+                // Back selected -> do not consume turn, return to outer menu
+                if (choice == backIndex)
+                {
+                    return false;
+                }
+            }
         }
 
         private string[] BuildHeader(Character target, string bottomText)

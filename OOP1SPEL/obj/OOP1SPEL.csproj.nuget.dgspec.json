@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\OOP1SPEL.csproj": {}
+    "C:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\OOP1SPEL.csproj": {}
   },
   "projects": {
-    "c:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\OOP1SPEL.csproj": {
+    "C:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\OOP1SPEL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\OOP1SPEL.csproj",
+        "projectUniqueName": "C:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\OOP1SPEL.csproj",
         "projectName": "OOP1SPEL",
-        "projectPath": "c:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\OOP1SPEL.csproj",
+        "projectPath": "C:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\OOP1SPEL.csproj",
         "packagesPath": "C:\\Users\\kajsa\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\obj\\",
+        "outputPath": "C:\\Users\\kajsa\\gitrepos\\OOP1Project\\OOP1SPEL\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\kajsa\\AppData\\Roaming\\NuGet\\NuGet.Config",

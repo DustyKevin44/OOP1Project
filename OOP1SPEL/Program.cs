@@ -10,9 +10,13 @@ namespace MonsterBattler
     {
         static void Main()
         {
+            ActionFactory factory = new ActionFactory();
+
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            RoundInitiator.MainMenu();
+            RoundInitiator roundInitiator = new RoundInitiator(factory);
+            roundInitiator.MainMenu();
+            Console.WriteLine("Game close");
         }
     }
 }

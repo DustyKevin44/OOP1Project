@@ -6,11 +6,11 @@ namespace MonsterBattler
 {
     public static class CombatManager
     {
-        public static List<Character>? Participants { get; private set; }
+    public static Character?[]? Participants { get; private set; }
         public static bool FightEnded { get; private set; } = false;
         public static Character? LastDead { get; private set; }
 
-        public static void StartFight(List<Character> participants)
+        public static void StartFight(Character?[] participants)
         {
             Participants = participants;
             FightEnded = false;
@@ -28,12 +28,12 @@ namespace MonsterBattler
         // Called by the fight loop when a death or fight end occurs. Returns true when player chose retry.
         public static bool PromptEndFight()
         {
-            if (Participants == null || Participants.Count < 2)
+            if (Participants == null || Participants.Length < 2)
                 return false;
 
             // Determine winner/loser
-            Character p = Participants[0];
-            Character o = Participants[1];
+            Character? p = Participants[0];
+            Character? o = Participants[1];
 
             Character? dead = LastDead;
             Character? alive = LastDead;
@@ -76,7 +76,6 @@ namespace MonsterBattler
                     foreach (var c in Participants)
                     {
                         c.Health = c.MaxHealth;
-                        c.Armor = 0;
                     }
                     FightEnded = false;
                     LastDead = null;

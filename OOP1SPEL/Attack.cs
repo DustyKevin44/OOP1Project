@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 
 namespace MonsterBattler
 {
@@ -8,6 +9,9 @@ namespace MonsterBattler
     {
         void Execute(Character se, Character? re = null);
         void PlayAnimation(Character se, Character re);
+
+        String GetInfo(Character Sender);
+        String Name {get;}
     }
     public interface IAttack
     {
@@ -78,6 +82,7 @@ namespace MonsterBattler
 
         public string Name { get; protected set; } = "No Name";
         public int Damage { get; protected set; } = 0;
+        public int DexterityDamage { get; protected set; } = 0;
         public string Desc { get; protected set; } = "No description";
         public int Tier { get; protected set; } = 1;
         public DamageTypes DType = DamageTypes.None;
@@ -95,6 +100,7 @@ namespace MonsterBattler
             Console.WriteLine($"{se.Name} deals {dmg} damage!");
          
         }
+    
 
         public virtual int CalculateDamageAmount(Character sender, Character receiver)
         {
@@ -198,7 +204,7 @@ namespace MonsterBattler
     {
         public RecoilShot()
         {
-            Name = "Recoil Shot"; Damage = 2; DType = DamageTypes.Physical; Tier = 2;
+            Name = "Recoil Shot"; Damage = 2; DType = DamageTypes.Magical; Tier = 2;
             Desc = "Powerful shot that harms yourself slightly.";
         }
 
@@ -214,7 +220,6 @@ namespace MonsterBattler
         {
             // ✅ Insert extra behavior BEFORE base
             int dmg = CalculateDamageAmount(sender, receiver!);
-
             // Call centralized base Execute
             base.Execute(sender, receiver);
 
@@ -283,6 +288,23 @@ namespace MonsterBattler
 
             // Call centralized base Execute
             base.Execute(sender, receiver);
+        }
+        
+    }
+    public class WebSnare : Attack
+    {
+        public WebSnare()
+        {
+            Name = "Websnare"; Dexterity = 1; DType = DamageTypes.Physical; Tier = 2;
+            Desc = "Fires sticky webs that slows the enemies movement permanently.";
+        }
+
+        public override void PlayAnimation(Character sender, Character receiver)
+        {
+            if (sender is Player)
+                Animation.ShootAnimation(sender, receiver, "🕸️");
+            else
+                Animation.ReceiveShootAnimation(sender, receiver, "🕸️");
         }
     }
 
