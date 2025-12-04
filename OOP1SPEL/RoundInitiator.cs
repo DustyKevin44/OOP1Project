@@ -89,7 +89,11 @@ public class RoundInitiator
     public void RoundInitiater(Player? player, int round)
     {
         Character?[] chars = new Character?[2];
+        if (player is not null)
+        {
+            chars[0] = p1;
 
+        }
         switch (round)
         {
             case 0:
@@ -114,12 +118,13 @@ public class RoundInitiator
                     Console.ResetColor();
 
                     Enemy e = StartRound(chars, "Zombie");
-                    e.LevelUp(0, 2, 0, 0, 0);
+                    e.LevelUp(0, 0, 0, 0, 0);
 
                     var ram = _actionFactory.Create("Ram")!;
                     e.Actions.Add(ram);
 
                     EndRound(chars);
+                    RoundInitiater(p1, 2);
                     break;
                 }
             case 2:
@@ -139,6 +144,8 @@ public class RoundInitiator
                     e.Actions.Add(ram);
 
                     EndRound(chars);
+                    RoundInitiater(p1, 3);
+
                     break;
                 }
 
@@ -161,6 +168,8 @@ public class RoundInitiator
                     e.Actions.Add(recoilShot);
 
                     EndRound(chars);
+                    RoundInitiater(p1, 4);
+
                     break;
                 }
 
@@ -184,6 +193,8 @@ public class RoundInitiator
                     e.Actions.Add(berserkStrike);
 
                     EndRound(chars);
+                    RoundInitiater(p1, 5);
+
                     break;
                 }
 
@@ -206,6 +217,8 @@ public class RoundInitiator
                     e.Actions.Add(weakenEnemy);
 
                     EndRound(chars);
+                    RoundInitiater(p1, 6);
+
                     break;
 
                 }
@@ -228,6 +241,8 @@ public class RoundInitiator
                     e.Actions.Add(ram);
 
                     EndRound(chars);
+                    RoundInitiater(p1, 7);
+
                     break;
                 }
             case 7:
@@ -251,6 +266,8 @@ public class RoundInitiator
                     e.Actions.Add(berserkStrike);
 
                     EndRound(chars);
+                    RoundInitiater(p1, 8);
+
                     break;
                 }
             case 8:
@@ -271,6 +288,8 @@ public class RoundInitiator
                     e.Actions.Add(weakenEnemy);
 
                     EndRound(chars);
+                    RoundInitiater(p1, 9);
+
                     break;
                 }
             case 9:
@@ -294,6 +313,8 @@ public class RoundInitiator
                     e.Actions.Add(weakenEnemy);
 
                     EndRound(chars);
+                    RoundInitiater(p1, 10);
+
                     break;
                 }
 
