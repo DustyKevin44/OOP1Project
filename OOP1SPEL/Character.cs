@@ -1,6 +1,8 @@
 namespace MonsterBattler{
+    
 public class Character
 {
+    
     public string Name { get; private set; }
     public int Strength { get; set; }
     public int Vitality { get; set; }
@@ -21,7 +23,7 @@ public class Character
 
     public int MaxHealth => Vitality * 10;
 
-
+    // Objektkomposition
     public List<IAction> Actions { get; } = new();
     protected Random rand = new();
 

@@ -8,6 +8,7 @@ public class Enemy : Character
         : base(name, strength: 1, vitality: 1, intelligence: 1, dexterity: 1)
     {
     }
+    // Overloading av konstruktorer
     public Enemy(
     string name,
     int strength,

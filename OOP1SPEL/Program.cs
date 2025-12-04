@@ -6,24 +6,27 @@ using System.Numerics;
 namespace MonsterBattler
 {
 
-    public class Smain
+    public class Game
     {
         static void Main()
         {
-            while (true){
-                  try{
-                Init();
+            while (true)
+            {
+                try
+                {
+                    Init();
                 }
                 catch
                 {
-                    
-                 }
+
+                }
             }
-          
+
         }
         static void Init()
         {
-             ActionFactory factory = new ActionFactory();
+            //Beroendeinjektion
+            ActionFactory factory = new ActionFactory();
 
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 

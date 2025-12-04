@@ -82,13 +82,15 @@ public class RoundInitiator
     {
         NewFight(chars);
         chars[1] = null;
-        chars[0]!.LevelUp();
+        if(chars[0].IsAlive()) chars[0]!.LevelUp();
+
     }
 
-    // Instance method — uses the injected _actionFactory for creating actions.
     public void RoundInitiater(Player? player, int round)
     {
+        // Subtypspolymorfism #2
         Character?[] chars = new Character?[2];
+
         if (player is not null)
         {
             chars[0] = player;
@@ -101,6 +103,7 @@ public class RoundInitiator
                     Player newplayer = CreatePlayer();
                     newplayer.NewAbility(1);
                     chars[0] = newplayer;
+                    
                     RoundInitiater(newplayer, 1);
                     break;
                 }
@@ -124,7 +127,8 @@ public class RoundInitiator
                     e.Actions.Add(ram);
 
                     EndRound(chars);
-                    RoundInitiater(player, 2);
+                    if(player.IsAlive())RoundInitiater(player, 2);
+
                     break;
                 }
             case 2:
@@ -138,13 +142,14 @@ public class RoundInitiator
                         "Its hollow eyes lock onto you as it charges without hesitation."
                     });
                     Enemy e = StartRound(chars, "Enraged Zombie");
-                    e.LevelUp(0, 2, 1, 0, 0);
+                    e.LevelUp(0, 0, 1, 0, 0);
 
                     var ram = _actionFactory.Create("Ram")!;
                     e.Actions.Add(ram);
 
                     EndRound(chars);
-                    RoundInitiater(player, 3);
+                    player.NewAbility(1);
+                    if(player.IsAlive())RoundInitiater(player, 3);
 
                     break;
                 }
@@ -159,7 +164,7 @@ public class RoundInitiator
                     });
 
                     Enemy e = StartRound(chars, "Skeleton");
-                    e.LevelUp(0, 0, 2, 1, 1);
+                    e.LevelUp(0, 0, 1, 1, 1);
 
                     var fireBall = _actionFactory.Create("FireBall")!;
                     e.Actions.Add(fireBall);
@@ -168,7 +173,9 @@ public class RoundInitiator
                     e.Actions.Add(recoilShot);
 
                     EndRound(chars);
-                    RoundInitiater(player, 4);
+                    player.NewAbility(1);
+
+                    if(player.IsAlive())RoundInitiater(player, 4);
 
                     break;
                 }
@@ -193,7 +200,9 @@ public class RoundInitiator
                     e.Actions.Add(berserkStrike);
 
                     EndRound(chars);
-                    RoundInitiater(player, 5);
+                    player.NewAbility(2);
+
+                    if(player.IsAlive())RoundInitiater(player, 5);
 
                     break;
                 }
@@ -217,7 +226,9 @@ public class RoundInitiator
                     e.Actions.Add(weakenEnemy);
 
                     EndRound(chars);
-                    RoundInitiater(player, 6);
+                    player.NewAbility(3);
+
+                    if(player.IsAlive())RoundInitiater(player, 6);
 
                     break;
 
@@ -241,7 +252,9 @@ public class RoundInitiator
                     e.Actions.Add(ram);
 
                     EndRound(chars);
-                    RoundInitiater(player, 7);
+                    player.NewAbility(2);
+
+                    if(player.IsAlive())RoundInitiater(player, 7);
 
                     break;
                 }
@@ -266,7 +279,7 @@ public class RoundInitiator
                     e.Actions.Add(berserkStrike);
 
                     EndRound(chars);
-                    RoundInitiater(player, 8);
+                    if(player.IsAlive())RoundInitiater(player, 8);
 
                     break;
                 }
@@ -288,7 +301,7 @@ public class RoundInitiator
                     e.Actions.Add(weakenEnemy);
 
                     EndRound(chars);
-                    RoundInitiater(player, 9);
+                    if(player.IsAlive())RoundInitiater(player, 9);
 
                     break;
                 }
@@ -313,7 +326,7 @@ public class RoundInitiator
                     e.Actions.Add(weakenEnemy);
 
                     EndRound(chars);
-                    RoundInitiater(player, 10);
+                    if(player.IsAlive())RoundInitiater(player, 10);
 
                     break;
                 }

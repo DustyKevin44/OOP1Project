@@ -73,7 +73,7 @@ namespace MonsterBattler
             Animation.Weaken(sender, receiver);
         }
     }
-
+    // Subtypspolymorfism #1
     public class Attack : IAttack, IAction
     {
         private static readonly Random rng = new Random();
