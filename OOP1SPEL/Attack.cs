@@ -115,22 +115,17 @@ namespace MonsterBattler
             return Math.Max(0, (int)Math.Round(low + (high - low) * t));
         }
 
-        // ==================== CENTRALIZED EXECUTE ====================
         public virtual void Execute(Character sender, Character? receiver)
         {
             if (receiver == null) return;
 
-            // ✅ Show action used animation for all attacks
             Animation.ActionUsedAnimation(sender, Name);
 
-            // ✅ Play attack animation
             PlayAnimation(sender, receiver);
 
-            // ✅ Calculate and show damage
             int dmg = CalculateDamageAmount(sender, receiver!);
             Animation.ShowDamage(receiver, dmg, DType == DamageTypes.Magical ? "✨" : "💥");
 
-            // ✅ Apply damage
             ApplyDamage(sender, receiver, dmg);
         }
 
@@ -216,12 +211,9 @@ namespace MonsterBattler
 
         public override void Execute(Character sender, Character? receiver)
         {
-            // ✅ Insert extra behavior BEFORE base
             int dmg = CalculateDamageAmount(sender, receiver!);
-            // Call centralized base Execute
             base.Execute(sender, receiver);
 
-            // ✅ Apply recoil after base damage
             int recoil = (int)Math.Ceiling(dmg * 0.2f);
             sender.Health -= recoil;
             Console.WriteLine($"{sender.Name} takes {recoil} recoil damage!");
@@ -255,7 +247,6 @@ namespace MonsterBattler
 
         public override void Execute(Character sender, Character? receiver)
         {
-            // Use centralized base Execute to handle animations and damage
             base.Execute(sender, receiver);
         }
     }
@@ -273,18 +264,15 @@ namespace MonsterBattler
 
         public override void Execute(Character sender, Character? receiver)
         {
-            // Extra step before base
             sender.Health -= (sender.Vitality * 10) / 5;
             Console.WriteLine($"{sender.Name} sacrifices 20% of health!");
 
-            // If the sender died from the sacrifice, abort and let death handling run immediately
             if (!sender.IsAlive())
             {
                 Console.WriteLine($"{sender.Name} died from the sacrifice!");
                 return;
             }
 
-            // Call centralized base Execute
             base.Execute(sender, receiver);
         }
 
@@ -292,7 +280,7 @@ namespace MonsterBattler
     public class WebSnare : Attack
     {
         public WebSnare()
-        { //fixa dexterity
+        { 
 
             Name = "Websnare"; Damage = 1; DType = DamageTypes.Physical; Tier = 2;
             Desc = "Fires sticky webs that slows the enemies movement permanently.";
@@ -307,10 +295,8 @@ namespace MonsterBattler
         }
         public override void Execute(Character sender, Character? receiver)
         {
-            // Extra step before base
             Random rnd = new();
             int randomNumber = rnd.Next(1, 3);
-            // If the sender died from the sacrifice, abort and let death handling run immediately
             if (randomNumber == 2)
             {
                 Console.WriteLine($"{receiver} got trapped! -1 Dexterity!");
@@ -320,7 +306,6 @@ namespace MonsterBattler
             {
                 Console.WriteLine($"{receiver} did not get trapped in the web!");
             }
-            // Call centralized base Execute
             base.Execute(sender, receiver);
         }
 
@@ -330,7 +315,6 @@ namespace MonsterBattler
         public PoisonGas()
         {
             Name = "PoisonGas"; Damage = 2; DType = DamageTypes.Magical; Tier = 2;
-            //ska även sakta ner fienden
             Desc = "Poisonous gas that damages and permanently lowers max hp.";
         }
 
