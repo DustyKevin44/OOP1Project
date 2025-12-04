@@ -125,6 +125,13 @@ public class RoundInitiator
             case 2:
                 {
                     chars[0] = player;
+
+                    Animation.ShowText(new string[]
+                    {
+                        "The forest grows unnaturally silent...",
+                        "A second zombie lurches from behind a twisted oak, its body twitching with violent rage.",
+                        "Its hollow eyes lock onto you as it charges without hesitation."
+                    });
                     Enemy e = StartRound(chars, "Enraged Zombie");
                     e.LevelUp(0, 2, 1, 0, 0);
 
@@ -138,6 +145,12 @@ public class RoundInitiator
             case 3:
                 {
                     chars[0] = player;
+                    Animation.ShowText(new string[]
+                    {
+                        "Skeletons rise from the mist, bones clattering.",
+                        "Their hollow eyes fix on you, empty and relentless."
+                    });
+
                     Enemy e = StartRound(chars, "Skeleton");
                     e.LevelUp(0, 0, 2, 1, 1);
 
@@ -177,6 +190,11 @@ public class RoundInitiator
             case 5:
                 {
                     chars[0] = player;
+                    Animation.ShowText(new string[]
+                    {
+                        "A mutated serpent coils through the swamp reeds.",
+                        "Its venomous eyes glint as it sense your presence."
+                    });
 
                     Enemy e = StartRound(chars, "Mutated Swamp Serpent");
                     e.LevelUp(0, 1, 2, 1, 0);
@@ -194,6 +212,12 @@ public class RoundInitiator
             case 6:
                 {
                     chars[0] = player;
+                    Animation.ShowText(new string[]
+                    {
+                        "A massive guardian emerges from the swamp's shadows.",
+                        "Its hulking form blocks your path, ready to attack."
+                    });
+
 
                     Enemy e = StartRound(chars, "Guardian of the swamp");
                     e.LevelUp(0, 3, 1, 2, 0);
@@ -232,6 +256,11 @@ public class RoundInitiator
             case 8:
                 {
                     chars[0] = player;
+                    Animation.ShowText(new string[]
+                    {
+                        "A gigantic spider descends from the ceiling, fangs dripping with venom.",
+                        "Sticky webs litter the floor, threatening to trap you."
+                    });
 
                     Enemy e = StartRound(chars, "Gigantic Spider");
                     e.LevelUp(0, 3, 2, 2, 0);
@@ -247,6 +276,13 @@ public class RoundInitiator
             case 9:
                 {
                     chars[0] = player;
+
+                    Animation.ShowText(new string[]
+                    {
+                        "A chill runs down your spine with each step,",
+                        "Every move you make is being watched",
+                        "Shadows shift as the EchoStalker circles unseen."
+                    });
 
                     Enemy e = StartRound(chars, "EchoStalker");
                     e.LevelUp(0, 3, 2, 2, 0);
@@ -264,10 +300,18 @@ public class RoundInitiator
             case 10:
                 {  //en till attack? + textttt
                     chars[0] = player;
+                    Animation.ShowText(new string[]
+                    {
+                        "As you find your way out of the cave a tall run-down mansion cathes your eye",
+                        "You choose to enter",
+                        "The air grows thick with dark energy.",
+                        "A Satanic Priest steps forward, summoning power from the abyss."
+                    });
+
                     Console.ForegroundColor = ConsoleColor.Red;
                     Animation.ShowText(new string[]
                     {
-                        
+
                     });
                     Console.ResetColor();
 
@@ -283,7 +327,7 @@ public class RoundInitiator
                     EndRound(chars);
                     break;
                 }
-                // lägga till en mage m alla spells  och en mirror fiende som har samma stats och attacker som playern
+            // lägga till en mage m alla spells  och en mirror fiende som har samma stats och attacker som playern
 
             default:
                 {

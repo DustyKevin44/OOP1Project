@@ -23,6 +23,8 @@ public class ActionFactory
             { "HealBuff", () => new HealBuff() },
             { "WeakenEnemy", () => new WeakenEnemy() },
             { "HealingPotion", () => new HealingPotion() },
+            
+            { "WebSnare", () => new WebSnare() },
             { "PoisonGas", () => new PoisonGas() },
             { "Summining", () => new Summoning() }
 

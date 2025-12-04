@@ -11,7 +11,7 @@ namespace MonsterBattler
         void PlayAnimation(Character se, Character re);
 
         String GetInfo(Character Sender);
-        String Name {get;}
+        String Name { get; }
     }
     public interface IAttack
     {
@@ -80,7 +80,7 @@ namespace MonsterBattler
 
         public string Name { get; protected set; } = "No Name";
         public int Damage { get; protected set; } = 0;
-       
+
         public string Desc { get; protected set; } = "No description";
         public int Tier { get; protected set; } = 1;
         public DamageTypes DType = DamageTypes.None;
@@ -90,15 +90,15 @@ namespace MonsterBattler
         public void ApplyDamage(Character se, Character re, int? total = null)
         {
             int dmg = total ?? CalculateDamageAmount(se, re);
-      
+
             int remaining = dmg;
             if (remaining > 0)
                 re.Health = Math.Max(0, re.Health - remaining);
 
             Console.WriteLine($"{se.Name} deals {dmg} damage!");
-         
+
         }
-    
+
 
         public virtual int CalculateDamageAmount(Character sender, Character receiver)
         {
@@ -161,12 +161,13 @@ namespace MonsterBattler
         }
 
         public override void PlayAnimation(Character sender, Character receiver)
-{
+        {
             if (sender is Player)
                 Animation.Ram(sender, receiver);
             else
                 Animation.ReceiveRam(sender, receiver);
-        }    }
+        }
+    }
 
     public class FireBall : Attack
     {
@@ -286,7 +287,7 @@ namespace MonsterBattler
             // Call centralized base Execute
             base.Execute(sender, receiver);
         }
-        
+
     }
     public class WebSnare : Attack
     {
@@ -304,16 +305,16 @@ namespace MonsterBattler
             else
                 Animation.ReceiveShootAnimation(sender, receiver, "🕸️");
         }
-          public override void Execute(Character sender, Character? receiver)
+        public override void Execute(Character sender, Character? receiver)
         {
             // Extra step before base
             Random rnd = new();
-            int randomNumber = rnd.Next(1,3);
+            int randomNumber = rnd.Next(1, 3);
             // If the sender died from the sacrifice, abort and let death handling run immediately
             if (randomNumber == 2)
             {
                 Console.WriteLine($"{receiver} got trapped! -1 Dexterity!");
-                receiver!.Dexterity = Math.Min(1, receiver.Dexterity-1);
+                receiver!.Dexterity = Math.Max(1, receiver.Dexterity - 1);
             }
             else
             {
@@ -322,7 +323,7 @@ namespace MonsterBattler
             // Call centralized base Execute
             base.Execute(sender, receiver);
         }
-        
+
     }
     public class PoisonGas : Attack
     {
@@ -340,13 +341,33 @@ namespace MonsterBattler
             else
                 Animation.ReceivePoisonGasAnimation(sender, receiver, "☁️");
         }
+
+        public override void Execute(Character sender, Character? receiver)
+        {
+            if (receiver == null) return;
+
+            int totalLoss = 1 + (sender.Intelligence / 5) - (receiver.Vitality / 10);
+
+            totalLoss = Math.Max(1, totalLoss);
+
+            // Apply effect
+            receiver.MaxHealth = Math.Max(1, receiver.MaxHealth - totalLoss);
+
+            Console.WriteLine
+            (
+                $"{receiver.Name} inhales the toxic fumes! Max HP permanently reduced by {totalLoss}!"
+            );
+
+            if (receiver.Health > receiver.MaxHealth)
+                receiver.Health = receiver.MaxHealth;
+        }
     }
     public class Summoning : Attack
     {
         public Summoning()
         {
             Name = "Summoning"; Damage = 2; DType = DamageTypes.Magical; Tier = 3;
-            Desc = "Poisonous gas that damages and permanently lowers max hp.";
+            Desc = "A dark ritual that burns the enemy and weakens their life force.";
         }
 
         public override void PlayAnimation(Character sender, Character receiver)
@@ -356,7 +377,21 @@ namespace MonsterBattler
             else
                 Animation.RecieveSummoningAnimation(sender, receiver);
         }
+
+        public override void Execute(Character sender, Character? receiver)
+        {
+            if (receiver == null)
+                return;
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{sender.Name} unleashes demonic flames!");
+            Console.ResetColor();
+
+            Console.WriteLine($"{receiver.Name} is scorched by hellfire (-{Damage} HP)!");
+            
+            base.Execute(sender, receiver);
+        }
     }
-
-
 }
+
+
