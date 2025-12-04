@@ -24,16 +24,16 @@ namespace MonsterBattler
             string r = $"{receiver.Name} ({receiver.Health})";
             string s = $"{sender.Name} ({sender.Health})";
 
-            for (int i = 0; i < 7; i++) // same number of steps as Fireball
+            for (int i = 0; i < 7; i++) 
             {
                 DrawFrame(
-                    $"                                                    {r}",           // Receiver on top
+                    $"                                                    {r}",          
                     (i == 5 ? $"                                              {attackSymbol}" : " "),
                     (i == 4 ? $"                                        {attackSymbol}" : " "),
                     (i == 3 ? $"                                  {attackSymbol}" : " "),
                     (i == 2 ? $"                            {attackSymbol}" : " "),
                     (i == 1 ? $"                      {attackSymbol}" : " "),
-                    (i == 0 ? $" {s}  " : $" {s}  ")                           // Sender on bottom
+                    (i == 0 ? $" {s}  " : $" {s}  ")                          
                 );
                 Thread.Sleep(150);
             }
@@ -43,7 +43,7 @@ namespace MonsterBattler
             string r = $"{receiver.Name} ({receiver.Health})";
             string s = $"{sender.Name} ({sender.Health})";
 
-            for (int i = 0; i < 7; i++) // same number of steps as Fireball
+            for (int i = 0; i < 7; i++) 
             {
                 DrawFrame(
                     $"                                                    {r}",
@@ -77,7 +77,6 @@ namespace MonsterBattler
             }
         }
 
-        // Receiving variant for visual effect only, keeping sender intact
         public static void ReceiveShootAnimation(Character sender, Character receiver, string attackSymbol)
         {
             string r = $"{receiver.Name} ({receiver.Health})";
@@ -118,7 +117,6 @@ namespace MonsterBattler
             }
         }
 
-        // Receiving Ram (sender stays in place visually)
         public static void ReceiveRam(Character sender, Character receiver)
         {
             string s = sender.Name;
@@ -217,21 +215,17 @@ namespace MonsterBattler
             string r = $"{receiver.Name} ({receiver.Health})";
             string s = $"{sender.Name} ({sender.Health})";
 
-            for (int i = 0; i < 7; i++) // same number of steps as Fireball
+            for (int i = 0; i < 7; i++) 
             {
-//     /\   
-// -.-/--\-,- 
-//   /-.,-\
-//  /,-''-.\
                 DrawFrame(
-                               // Receiver on top
+                              
                     (i >= 5 ? $"             __________                      " : " "),
                     (i >= 4 ? $"            /    /\\   \\                         " : " "),
                     (i >= 3 ? (i == 6 ?  $"           / -.-/-{r}\\-,-\\                     " : "$           / -.-/--\\-,-\\                     ") : "" ),
                     (i >= 2 ? $"          \\   /-.,-\\   /                      " : " "),
                     (i >= 1 ? $"           \\ /,-''-.\\ /                         " : " "),
                     (i >= 0 ? $"            \\_________/    " : $" {s}  "),                    
-                    $"{r}"       // Sender on bottom
+                    $"{r}"       
                 );
                 Thread.Sleep(150);
             }

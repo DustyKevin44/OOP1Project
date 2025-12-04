@@ -4,14 +4,10 @@ namespace MonsterBattler{
 public class ActionFactory
 {
     // ============ Inkapsling ======================= 
-    // Jag har denna dictionary som private readonly då 
     private readonly Dictionary<string, Func<IAction>> _registry;
     
     public ActionFactory()
     {
-        // Register abilities here.
-        // Key = ability name used in menus
-        // Value = function that returns a new instance
         _registry = new Dictionary<string, Func<IAction>>(StringComparer.OrdinalIgnoreCase)
         {
             { "Ram", () => new Ram() },
@@ -36,7 +32,7 @@ public class ActionFactory
         if (_registry.TryGetValue(actionName, out var constructor))
             return constructor();
 
-        return null; // Unknown ability
+        return null; 
     }
 
   public IEnumerable<string> GetAllActionNames() => _registry.Keys;
