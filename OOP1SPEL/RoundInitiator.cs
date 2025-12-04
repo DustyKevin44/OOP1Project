@@ -98,10 +98,10 @@ public class RoundInitiator
         {
             case 0:
                 {
-                    Player player = CreatePlayer();
-                    player.NewAbility(1);
-                    chars[0] = player;
-                    RoundInitiater(player, 1);
+                    Player newplayer = CreatePlayer();
+                    newplayer.NewAbility(1);
+                    chars[0] = newplayer;
+                    RoundInitiater(newplayer, 1);
                     break;
                 }
 
