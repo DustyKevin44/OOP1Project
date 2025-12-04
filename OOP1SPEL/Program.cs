@@ -10,7 +10,20 @@ namespace MonsterBattler
     {
         static void Main()
         {
-            ActionFactory factory = new ActionFactory();
+            while (true){
+                  try{
+                Init();
+                }
+                catch
+                {
+                    
+                 }
+            }
+          
+        }
+        static void Init()
+        {
+             ActionFactory factory = new ActionFactory();
 
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
