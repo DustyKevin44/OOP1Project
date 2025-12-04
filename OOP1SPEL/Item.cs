@@ -3,22 +3,17 @@ using System.Linq;
 
 namespace MonsterBattler
 {
-    // Base consumable item implementing IAction
     public abstract class Item : IAction
     {
         public string Name { get; protected set; } = "No name";
         public string Desc { get; protected set; } = "No description";
  
-        // Execute should perform the item's effect and then remove itself from the user's Actions list
         public void Execute(Character se, Character? re = null)
         {
-            // Perform the specific item effect
             Use(se, re);
 
-            // After use, remove this item from the sender's action list (consumable)
             if (se.Actions != null)
             {
-                // Find the first action instance that is the same runtime type as this item instance
                 var toRemove = se.Actions.FirstOrDefault(a => Object.ReferenceEquals(a, this) || a.GetType() == this.GetType());
                 if (toRemove != null)
                 {
@@ -28,10 +23,8 @@ namespace MonsterBattler
             }
         }
 
-        // Each item implements its own effect here
         protected abstract void Use(Character se, Character? re = null);
 
-        // Default no-op animation; items can override if they want
         public virtual void PlayAnimation(Character se, Character re) { }
 
         public virtual string GetInfo(Character sender)
@@ -41,7 +34,6 @@ namespace MonsterBattler
     
     }
 
-    // Healing Potion: restores health to the user
     public class HealingPotion : Item
     {
         private readonly int _healAmount = 5;
@@ -60,7 +52,6 @@ namespace MonsterBattler
         }
     }
 
-    // Strength Potion: increases sender's Strength (temporary persistence depends on design; we'll make it permanent for simplicity)
     public class StrengthPotion : Item
     {
         private readonly int _strengthGain = 1;
@@ -74,7 +65,7 @@ namespace MonsterBattler
         {
             se.Strength += _strengthGain;
             Console.WriteLine($"{se.Name} drinks a Strength Potion and gains {_strengthGain} Strength!");
-            // Optionally show a buff animation
+        
             Animation.Heal(se);
         }
     }
@@ -95,7 +86,7 @@ namespace MonsterBattler
         }
     }
 
-    // Web Trap: reduces target's Dexterity
+   
     public class WebTrap : Item
     {
         private readonly int _dexReduction = 1;

@@ -327,7 +327,6 @@ public class RoundInitiator
                     EndRound(chars);
                     break;
                 }
-            // lägga till en mage m alla spells  och en mirror fiende som har samma stats och attacker som playern
 
             default:
                 {
@@ -336,8 +335,6 @@ public class RoundInitiator
                 }
         }
     }
-
-    // Now an instance method so it can use the injected factory for enemy creation/abilities.
     public void CreatePlayerAndBattle()
     {
         Player player = CreatePlayer();

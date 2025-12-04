@@ -20,7 +20,6 @@ namespace MonsterBattler
                 return;
             }
 
-            // Keep showing the action menu until the player performs an action or gives up
             bool turnTaken = false;
             while (!turnTaken)
             {
@@ -31,7 +30,6 @@ namespace MonsterBattler
 
                 if (choice == 0)
                 {
-                    // AttackMenu returns true when an action was executed (consumes the turn).
                     turnTaken = AttackMenu(target);
                 }
                 else
@@ -42,7 +40,6 @@ namespace MonsterBattler
             }
         }
 
-        // Returns true if an action was executed (turn consumed), false if player backed out
         public bool AttackMenu(Character target)
         {
             bool showDescriptions = false;
@@ -51,7 +48,6 @@ namespace MonsterBattler
             {
                 List<string> menuItems = new();
 
-                // Build display entries depending on toggle
                 for (int i = 0; i < Actions.Count; i++)
                 {
                     var a = Actions[i];
@@ -72,18 +68,16 @@ namespace MonsterBattler
                     }
                 }
 
-                // Add Toggle Description option just above Back
                 menuItems.Add(showDescriptions ? "Hide Descriptions" : "Toggle Description");
                 menuItems.Add("Back");
 
                 string[] header = BuildHeader(target, "Choose attack:");
                 int choice = UI.NiceMenu(header, menuItems);
 
-                // If player selected one of the actions
                 if (choice >= 0 && choice < Actions.Count)
                 {
                     Actions[choice].Execute(this, target);
-                    return true; // action executed, consume turn
+                    return true; 
                 }
 
                 int toggleIndex = Actions.Count;
@@ -92,11 +86,9 @@ namespace MonsterBattler
                 if (choice == toggleIndex)
                 {
                     showDescriptions = !showDescriptions;
-                    // continue loop to redraw menu
                     continue;
                 }
 
-                // Back selected -> do not consume turn, return to outer menu
                 if (choice == backIndex)
                 {
                     return false;

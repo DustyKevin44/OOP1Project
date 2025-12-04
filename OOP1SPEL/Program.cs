@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Numerics;
 
-// Kevin 2025 8.2.1
+// Kevin och Kajsa 2025 8.2.1
 namespace MonsterBattler
 {
 

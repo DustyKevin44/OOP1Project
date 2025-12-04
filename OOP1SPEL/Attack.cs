@@ -350,9 +350,7 @@ namespace MonsterBattler
 
             totalLoss = Math.Max(1, totalLoss);
 
-            // Apply effect
-            receiver.MaxHealth = Math.Max(1, receiver.MaxHealth - totalLoss);
-
+           
             Console.WriteLine
             (
                 $"{receiver.Name} inhales the toxic fumes! Max HP permanently reduced by {totalLoss}!"
