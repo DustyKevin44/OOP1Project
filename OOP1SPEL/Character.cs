@@ -9,7 +9,10 @@ public class Character
     public int Dexterity { get; set; }
     public int Intelligence { get; set; }
     
-    // ============== Computed properties ==================
+    // KRAV 3:
+    // 1: Computed properties
+    // 2: `MaxHealth` beräknas utifrån `Vitality` och `Health` hanteras via en property med validering.
+    // 3: För att garantera korrekta invariants och automatiskt uppdatera beroende värden.
     private int _health;
     public int Health
     {
@@ -23,7 +26,10 @@ public class Character
 
     public int MaxHealth => Vitality * 10;
 
-    // Objektkomposition
+    // KRAV 4:
+    // 1: Objektkomposition
+    // 2: `Character` innehåller en lista `Actions` för att komponera beteenden från `IAction`-objekt.
+    // 3: För att bygga komplexa objekt genom att kombinera enklare komponenter och främja återanvändning.
     public List<IAction> Actions { get; } = new();
     protected Random rand = new();
 

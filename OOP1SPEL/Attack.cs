@@ -73,7 +73,10 @@ namespace MonsterBattler
             Animation.Weaken(sender, receiver);
         }
     }
-    // Subtypspolymorfism #1
+        // KRAV 6:
+        // 1: Subtypspolymorfism
+        // 2: `Attack` implementerar `IAttack` och `IAction`, och används polymorft av olika subklasser.
+        // 3: För att kunna förlänga beteenden via subklasser och behandla dem genom gemensamma typer.
     public class Attack : IAttack, IAction
     {
         private static readonly Random rng = new Random();

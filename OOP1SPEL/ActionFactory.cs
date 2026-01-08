@@ -3,7 +3,10 @@ namespace MonsterBattler{
 
 public class ActionFactory
 {
-    // ============ Inkapsling ======================= 
+    // KRAV 1:
+    // 1: Inkapsling
+    // 2: Privat `_registry` döljer implementationen; publika metoder exponerar endast skapande av `IAction`.
+    // 3: För att skydda intern representation och begränsa åtkomst, vilket förenklar underhåll.
     private readonly Dictionary<string, Func<IAction>> _registry;
     
     public ActionFactory()

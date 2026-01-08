@@ -8,7 +8,10 @@ public class Enemy : Character
         : base(name, strength: 1, vitality: 1, intelligence: 1, dexterity: 1)
     {
     }
-    // Overloading av konstruktorer
+    // KRAV 2:
+    // 1: Overloading av konstruktorer
+    // 2: Flera konstruktörer tillåter både standardvärden och full specifikation av attribut.
+    // 3: För att förenkla instansiering i olika scenarier (snabbstandard eller detaljerad setup).
     public Enemy(
     string name,
     int strength,

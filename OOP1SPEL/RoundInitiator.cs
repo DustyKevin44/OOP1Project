@@ -12,10 +12,8 @@ public class RoundInitiator
         _actionFactory = actionFactory ?? throw new ArgumentNullException(nameof(actionFactory));
     }
 
-    // Keep MainMenu static but create one RoundInitiator with the factory provided here.
     public void MainMenu()
     {
-        // Create ONE shared ActionFactory and ONE shared RoundInitiator that will be reused.
         var sharedFactory = new ActionFactory();
         var roundSystem = new RoundInitiator(sharedFactory);
 
@@ -57,7 +55,6 @@ public class RoundInitiator
         }
     }
 
-    // These helper methods do not require the factory and can remain static.
     static Player CreatePlayer()
     {
         Console.Clear();
@@ -88,7 +85,10 @@ public class RoundInitiator
 
     public void RoundInitiater(Player? player, int round)
     {
-        // Subtypspolymorfism #2
+        // KRAV 7:
+        // 1: Subtypspolymorfism
+        // 2: Metoden använder `Character`-typen och tillåter `Player` eller andra subtyper.
+        // 3: För att kunna behandla olika karaktärstyper enhetligt och återanvända kod.
         Character?[] chars = new Character?[2];
 
         if (player is not null)
@@ -332,7 +332,7 @@ public class RoundInitiator
                 }
 
             case 10:
-                {  //en till attack? + textttt
+                {
                     chars[0] = player;
                     Animation.ShowText(new string[]
                     {
@@ -405,7 +405,6 @@ public class RoundInitiator
             Character?[] combatants = new Character?[] { player, enemy };
             NewFight(combatants);
 
-            // Ask if player wants to continue
             if (player.IsAlive())
             {
                 string[] continueHeader = new string[]
@@ -428,7 +427,6 @@ public class RoundInitiator
         }
     }
 
-    // Instance version so AddAbilitiesToEnemy can use the injected factory instance.
     public Enemy? CreateEnemyMenu()
     {
         string[] nameHeader = new string[]
@@ -451,7 +449,6 @@ public class RoundInitiator
 
         Enemy enemy = new Enemy(enemyName);
 
-        // Level up menu
         string[] levelHeader = new string[]
         {
             "════════════════════════════",
@@ -465,7 +462,6 @@ public class RoundInitiator
 
         if (levelChoice == 0)
         {
-            // Random levels
             string[] randomHeader = new string[]
             {
                 "════════════════════════════",
@@ -493,13 +489,11 @@ public class RoundInitiator
             enemy.LevelUpCustom();
         }
 
-        // Add abilities to enemy using the injected factory instance (no new factory).
         AddAbilitiesToEnemy(enemy);
 
         return enemy;
     }
 
-    // Use the injected factory everywhere here (no new ActionFactory()).
     public void AddAbilitiesToEnemy(Enemy enemy)
     {
         string[] abilityHeader =
@@ -510,7 +504,6 @@ public class RoundInitiator
             ""
         };
 
-        // Get all abilities registered inside the injected ActionFactory
         List<string> allAbilities = _actionFactory.GetAllActionNames().ToList();
         allAbilities.Add("Done Adding Abilities");
 
@@ -535,7 +528,6 @@ public class RoundInitiator
             }
             else
             {
-                // Use injected factory instance
                 IAction? newAction = _actionFactory.Create(chosenName);
 
                 if (newAction != null)
@@ -553,7 +545,6 @@ public class RoundInitiator
         }
     }
 
-    // NewFight doesn't need factory — keep static.
     static void NewFight(Character?[] chars)
     {
         Random rand = new();
@@ -565,7 +556,7 @@ public class RoundInitiator
         do
         {
             Animation.NewFightAnimation(chars[current]!);
-            // Fight loop
+            
             while (chars[0]!.IsAlive() && chars[1]!.IsAlive() && !CombatManager.FightEnded)
             {
                 Console.Clear();
